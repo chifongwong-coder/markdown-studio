@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Logo draft for Markdown Viewer with Math.
+     128x128 canvas, designed to scale down cleanly to 16x16.
+     Concept: M = four books on a shelf (|\/|), D = closed book + half-open book.
+     Open this in Figma / Illustrator / Inkscape to refine. -->
+<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background: rounded blue square matching the app accent color -->
+  <rect width="128" height="128" rx="24" fill="#3b82f6"/>
+
+  <!-- ============================== M ============================== -->
+  <!-- Books at y=32..96 (height 64), centered vertically on canvas.
+       Each book is 10px wide with a 1px corner radius. -->
+  <g fill="#ffffff">
+    <!-- Book 1: vertical, leftmost stroke of M -->
+    <rect x="13" y="32" width="10" height="64" rx="1.5"/>
+
+    <!-- Book 2: leans top-out to the right (\ direction in |\/|).
+         Rotated 22 degrees around its bottom-center so the base stays anchored. -->
+    <rect x="23" y="32" width="10" height="64" rx="1.5"
+          transform="rotate(22 28 96)"/>
+
+    <!-- Book 3: leans top-out to the left (/ direction in |\/|).
+         Rotated -22 degrees around its bottom-center. -->
+    <rect x="44" y="32" width="10" height="64" rx="1.5"
+          transform="rotate(-22 49 96)"/>
+
+    <!-- Book 4: vertical, rightmost stroke of M -->
+    <rect x="54" y="32" width="10" height="64" rx="1.5"/>
+  </g>
+
+  <!-- ============================== D ============================== -->
+  <g fill="#ffffff">
+    <!-- D's vertical bar: a closed book, same dimensions as M's vertical books -->
+    <rect x="76" y="32" width="10" height="64" rx="1.5"/>
+
+    <!-- D's bowl: a half-open book whose cover bulges out to the right.
+         The shape is a closed path that starts at the top of the spine,
+         curves out and around, and returns to the bottom. -->
+    <path d="
+      M 86 32
+      L 92 32
+      C 110 32  118 46  118 64
+      C 118 82  110 96  92 96
+      L 86 96
+      Z" />
+
+    <!-- A subtle horizontal line down the middle suggests the page spread.
+         Color matches the background so it 'cuts' the white shape. -->
+    <line x1="92" y1="64" x2="115" y2="64"
+          stroke="#3b82f6" stroke-width="1.6" stroke-linecap="round"/>
+  </g>
+</svg>

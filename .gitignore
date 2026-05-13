@@ -1,19 +1,19 @@
 # macOS
 .DS_Store
 
-# 编辑器
+# Editors
 .vscode/
 .idea/
 *.swp
 
-# 日志
+# Logs
 *.log
 
-# 临时打包产物
+# Build artifacts
 *.zip
 build/
 dist/
 
-# 注意：vendor/ 是 install.sh 下载的依赖，刻意提交到仓库——
-# 1. Chrome Web Store 上架必须打进 zip 一起提交
-# 2. 锁定版本，避免重新跑 install.sh 时 CDN 内容飘移
+# Note: vendor/ is downloaded by install.sh but deliberately committed:
+#   1. Chrome Web Store submission requires every dependency to ship in the zip.
+#   2. Pinning the files prevents CDN drift between re-runs of install.sh.
