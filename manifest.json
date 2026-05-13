@@ -42,7 +42,12 @@
         "vendor/highlight-monokai.css",
         "vendor/fonts/*"
       ],
-      "matches": ["<all_urls>"]
+      "matches": [
+        "*://*/*.md",
+        "*://*/*.markdown",
+        "*://*/*.mdown",
+        "file:///*"
+      ]
     }
   ]
 }
