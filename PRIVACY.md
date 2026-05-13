@@ -41,5 +41,5 @@ claims by reading the source directly.
 
 ## Contact
 
-If you have questions about this policy, open an issue on the project's
-GitHub repository.
+If you have questions about this policy, open an issue at
+<https://github.com/chifongwong-coder/markdown-viewer-math/issues>.

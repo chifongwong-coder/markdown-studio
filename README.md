@@ -1,15 +1,29 @@
 # Markdown Viewer with Math
 
-A Chrome extension that renders `.md` files directly in the browser:
+> Browse `.md` files in Chrome the way they're supposed to look — with proper
+> LaTeX math, syntax highlighting, and a collapsible table of contents.
+
+A Chrome extension that renders any `.md` file you open in Chrome (`.md`,
+`.markdown`, `.mdown`, served over `http(s)` **or** opened locally via
+`file://`) into a clean typographic page. Built around the one thing most
+existing viewers get wrong: dollar signs inside code blocks must stay
+literal, and escaped `\$` must not trigger formula extraction.
+
+## Features
 
 - **LaTeX math** — `$...$`, `$$...$$`, `\(...\)`, `\[...\]` rendered with KaTeX
 - **Formula boundary handling** — `$` inside fenced code blocks or inline code is left alone; escaped `\$` does not trigger extraction
 - **Syntax highlighting** — highlight.js, language auto-detected
-- **GFM** — tables, task lists, strikethrough
-- **Collapsible sidebar TOC** — auto-built from headings, click to scroll, scroll-driven active section tracking, persists collapsed/expanded state
+- **GFM** — tables, task lists, strikethrough, autolinks
+- **Collapsible sidebar TOC** — auto-built from headings, click to scroll, scroll-driven active-section tracking, persists collapsed/expanded state
 - **Dark mode** — follows `prefers-color-scheme`
 - **Local files** — supports `file:///` paths (requires opt-in on the extension page)
 - **XSS safe** — output is sanitized with DOMPurify before being written to the DOM
+- **Local-only** — no analytics, no telemetry, no remote requests; every dependency ships inside the extension package
+
+## Repository
+
+<https://github.com/chifongwong-coder/markdown-viewer-math>
 
 ## Local development
 
