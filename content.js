@@ -86,7 +86,9 @@
   function ensureBaseHref() {
     if (document.querySelector('base[href]')) return;
     const base = document.createElement('base');
-    base.href = location.href;
+    // Strip the fragment so relative anchor links (`<a href="#section">`)
+    // resolve against the document URL itself, not URL#fragment.
+    base.href = location.href.split('#')[0];
     const head = document.head || document.documentElement;
     head.insertBefore(base, head.firstChild);
   }
