@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Markdown Viewer with Math",
   "short_name": "MD Viewer",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Render .md files with proper LaTeX math (KaTeX), syntax highlighting, GFM tables, and a collapsible TOC. 100% local rendering.",
   "icons": {
     "16": "icons/16.png",

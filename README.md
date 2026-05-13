@@ -18,8 +18,8 @@ literal, and escaped `\$` must not trigger formula extraction.
 - **Collapsible sidebar TOC** — auto-built from headings, click to scroll, scroll-driven active-section tracking, persists collapsed/expanded state
 - **Dark mode** — follows `prefers-color-scheme`
 - **Local files** — supports `file:///` paths (requires opt-in on the extension page)
-- **XSS safe** — output is sanitized with DOMPurify before being written to the DOM
-- **Local-only** — no analytics, no telemetry, no remote requests; every dependency ships inside the extension package
+- **Sanitized output** — rendered HTML passes through DOMPurify before being written to the DOM
+- **Local rendering** — no analytics, no telemetry, no remote requests; every dependency ships inside the extension package
 
 ## Repository
 

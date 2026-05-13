@@ -28,6 +28,30 @@ sends.
 - No reading of pages other than `.md`, `.markdown`, `.mdown` files in the
   declared content-script match patterns.
 
+## User-data categories (matching the Chrome Web Store form)
+
+None of the following categories are collected, used, or transferred by
+this extension:
+
+- Personally identifiable information
+- Health information
+- Financial and payment information
+- Authentication information
+- Personal communications
+- Location
+- Web browsing history
+- User activity
+- Website content
+
+In addition, the developer certifies that:
+
+- We do not sell or transfer user data to third parties, outside the
+  approved use cases.
+- We do not use or transfer user data for purposes unrelated to the
+  extension's single purpose (rendering Markdown locally).
+- We do not use or transfer user data to determine creditworthiness or
+  for lending purposes.
+
 ## Permissions
 
 The extension declares only `content_scripts` matching `*.md` URLs (HTTP,
@@ -41,5 +65,9 @@ claims by reading the source directly.
 
 ## Contact
 
-If you have questions about this policy, open an issue at
-<https://github.com/chifongwong-coder/markdown-viewer-math/issues>.
+For questions about this policy or about the extension, you can:
+
+- open an issue at <https://github.com/chifongwong-coder/markdown-viewer-math/issues>
+- email **wongchifong0223@gmail.com**
+
+The developer responds to issues and email within a reasonable window.
