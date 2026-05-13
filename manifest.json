@@ -43,9 +43,7 @@
         "vendor/fonts/*"
       ],
       "matches": [
-        "*://*/*.md",
-        "*://*/*.markdown",
-        "*://*/*.mdown",
+        "*://*/*",
         "file:///*"
       ]
     }
