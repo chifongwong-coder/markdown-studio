@@ -48,6 +48,12 @@
       const t = h1.textContent.trim();
       if (t) document.title = t;
     }
+
+    // 挂载侧栏目录（h1–h6 不足 2 个时自动跳过）
+    if (window.MdViewer.mountTOC) {
+      try { window.MdViewer.mountTOC(article); }
+      catch (e) { console.warn('[md-viewer] TOC mount failed:', e); }
+    }
   }
 
   /** 运行时注入扩展内的 CSS（用 chrome.runtime.getURL，让 CSS 内的相对 URL

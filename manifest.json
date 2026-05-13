@@ -26,6 +26,7 @@
         "vendor/highlight.min.js",
         "vendor/purify.min.js",
         "lib/render.js",
+        "lib/toc.js",
         "content.js"
       ],
       "css": [

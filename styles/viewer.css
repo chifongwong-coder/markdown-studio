@@ -188,3 +188,153 @@ article.md-viewer-content {
     color: #fbbf24;
   }
 }
+
+/* ============================================================
+   侧栏目录 TOC
+   ============================================================ */
+
+.md-toc {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 280px;
+  height: 100vh;
+  overflow-y: auto;
+  padding: 1.4em 1em 2em;
+  background: var(--md-stripe);
+  border-right: 1px solid var(--md-border);
+  font-family:
+    "Noto Sans CJK SC", "PingFang SC", "Hiragino Sans GB",
+    -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  z-index: 100;
+  box-sizing: border-box;
+}
+
+.md-toc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.8em;
+  padding-bottom: 0.5em;
+  border-bottom: 1px solid var(--md-border);
+}
+.md-toc-title {
+  font-weight: 600;
+  color: var(--md-heading);
+  font-size: 0.95em;
+}
+.md-toc-toggle-all {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--md-muted);
+  font-size: 1em;
+  padding: 0.2em 0.5em;
+  border-radius: 3px;
+  line-height: 1;
+}
+.md-toc-toggle-all:hover {
+  background: var(--md-block-bg);
+  color: var(--md-text);
+}
+
+.md-toc ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.md-toc-children {
+  padding-left: 0.95em;
+  margin-left: 0.15em;
+  border-left: 1px solid transparent;
+}
+.md-toc-item:hover > .md-toc-children {
+  border-left-color: var(--md-border);
+}
+
+.md-toc-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.25em;
+  padding: 0.18em 0;
+}
+
+.md-toc-caret {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--md-muted);
+  font-size: 0.6em;
+  width: 0.9em;
+  height: 1.4em;
+  padding: 0;
+  margin-top: 0.35em;
+  visibility: hidden;
+}
+/* 有子节点的 item 才显示折叠箭头 */
+.md-toc-item:has(> .md-toc-children > .md-toc-item) > .md-toc-row > .md-toc-caret {
+  visibility: visible;
+}
+.md-toc-caret::before {
+  content: '▼';
+  display: inline-block;
+  transition: transform 0.12s ease;
+}
+.md-toc-item.md-toc-collapsed > .md-toc-row > .md-toc-caret::before {
+  transform: rotate(-90deg);
+}
+.md-toc-item.md-toc-collapsed > .md-toc-children {
+  display: none;
+}
+
+.md-toc-link {
+  color: var(--md-text);
+  text-decoration: none;
+  flex: 1;
+  min-width: 0;
+  line-height: 1.45;
+  padding: 0.05em 0.3em;
+  border-radius: 3px;
+  overflow-wrap: break-word;
+  transition: color 0.1s, background 0.1s;
+}
+.md-toc-link:hover {
+  color: var(--md-link);
+  background: var(--md-block-bg);
+}
+.md-toc-link.md-toc-active {
+  color: var(--md-link);
+  font-weight: 600;
+}
+.md-toc-level-1 > .md-toc-row > .md-toc-link {
+  font-weight: 600;
+  color: var(--md-heading);
+}
+.md-toc-level-1 > .md-toc-row > .md-toc-link.md-toc-active {
+  color: var(--md-link);
+}
+
+/* 有 TOC 时，正文区往右挪 */
+body.md-viewer-with-toc {
+  padding-left: 280px;
+  box-sizing: border-box;
+}
+
+/* 窄屏：直接隐藏 TOC（避免遮挡内容，简化交互） */
+@media (max-width: 960px) {
+  .md-toc { display: none; }
+  body.md-viewer-with-toc { padding-left: 0; }
+}
+
+/* TOC 滚动条样式（Webkit） */
+.md-toc::-webkit-scrollbar { width: 8px; }
+.md-toc::-webkit-scrollbar-thumb {
+  background: var(--md-border);
+  border-radius: 4px;
+}
+.md-toc::-webkit-scrollbar-thumb:hover {
+  background: var(--md-muted);
+}
