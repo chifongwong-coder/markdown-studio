@@ -33,6 +33,7 @@ REQUIRED=(
   vendor/highlight.min.js
   vendor/highlight-monokai.css
   vendor/purify.min.js
+  vendor/LICENSES.txt
   icons/16.png
   icons/48.png
   icons/128.png
