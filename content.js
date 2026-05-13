@@ -31,6 +31,20 @@
     return null;
   }
 
+  /** Replace the page's favicon with our bundled icon. Necessary because
+   *  Chrome caches favicons in its local Favicons database and may continue
+   *  showing an old icon set by a previously-installed Markdown extension
+   *  even after that extension is uninstalled. Explicitly setting a new
+   *  <link rel="icon"> overrides the cached entry. */
+  function setFavicon() {
+    document.querySelectorAll('link[rel~="icon"]').forEach((l) => l.remove());
+    const link = document.createElement('link');
+    link.rel = 'icon';
+    link.type = 'image/png';
+    link.href = chrome.runtime.getURL('icons/48.png');
+    (document.head || document.documentElement).appendChild(link);
+  }
+
   function renderInto(md) {
     const html = window.MdViewer.renderMarkdown(md);
 
@@ -42,6 +56,7 @@
     document.body.innerHTML = '';
     document.body.appendChild(article);
     document.body.classList.add('md-viewer-body');
+    setFavicon();
 
     // Syntax highlighting.
     window.MdViewer.highlightCode(article);
