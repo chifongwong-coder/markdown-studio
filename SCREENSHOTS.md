@@ -112,6 +112,27 @@ $$
 | Loss | $\mathcal{L}_\text{simple}$ | MSE on $\varepsilon$ |
 ````
 
+### Live reference: this is what those formulas look like when rendered
+
+The `$$...$$` blocks above are inside the code fence, so they appear as
+literal LaTeX source. The same formulas below are NOT inside a fence, so
+the extension renders them — handy as a side-by-side sanity check when
+opening this file in the viewer.
+
+Inline: $x_0$, $\beta_t$, $\mathcal{L}_\text{simple}$.
+
+Forward process:
+
+$$
+q(x_t \mid x_{t-1}) = \mathcal{N}\!\left(x_t;\, \sqrt{1 - \beta_t}\, x_{t-1},\, \beta_t I\right)
+$$
+
+Reverse process:
+
+$$
+p_\theta(x_{t-1} \mid x_t) = \mathcal{N}\!\big(x_{t-1};\, \mu_\theta(x_t, t),\, \Sigma_\theta(x_t, t)\big)
+$$
+
 For shot #3 specifically, scroll to the Python code block (section 2) so
 both the code containing `$x_t$` AND a real formula above it are visible.
 
