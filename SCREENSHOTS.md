@@ -62,9 +62,12 @@ screenshot is the one shown in search results.
 
 ## Demo Markdown (English-only, for screenshots 1–4)
 
-Save this as `demo.md` somewhere convenient and open in Chrome:
+Save this as `demo.md` somewhere convenient and open in Chrome. The outer
+fence uses four backticks so the inner three-backtick blocks for `python`
+and the document end are preserved verbatim as the demo's content (per the
+CommonMark rule that a closing fence must be at least as long as the open).
 
-```markdown
+````markdown
 # Diffusion Models: A Quick Refresher
 
 ## 1. The Forward Process
@@ -107,7 +110,7 @@ $$
 | Steps | $T$ | 1000 |
 | Noise schedule | $\beta_t$ | $10^{-4} \to 0.02$ |
 | Loss | $\mathcal{L}_\text{simple}$ | MSE on $\varepsilon$ |
-```
+````
 
 For shot #3 specifically, scroll to the Python code block (section 2) so
 both the code containing `$x_t$` AND a real formula above it are visible.
