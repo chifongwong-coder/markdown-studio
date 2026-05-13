@@ -1,0 +1,47 @@
+{
+  "manifest_version": 3,
+  "name": "Markdown Viewer with Math",
+  "short_name": "MD Viewer",
+  "version": "0.1.0",
+  "description": "Render .md files with proper LaTeX math, code highlighting, and CJK support. Designed around robust formula extraction that respects code fences and escaped dollars.",
+  "icons": {
+    "16": "icons/16.png",
+    "48": "icons/48.png",
+    "128": "icons/128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*/*.md",
+        "*://*/*.markdown",
+        "*://*/*.mdown",
+        "file:///*.md",
+        "file:///*.markdown",
+        "file:///*.mdown"
+      ],
+      "run_at": "document_end",
+      "js": [
+        "vendor/marked.min.js",
+        "vendor/katex.min.js",
+        "vendor/highlight.min.js",
+        "vendor/purify.min.js",
+        "lib/render.js",
+        "content.js"
+      ],
+      "css": [
+        "styles/viewer.css"
+      ],
+      "all_frames": false
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "vendor/katex.min.css",
+        "vendor/highlight-monokai.css",
+        "vendor/fonts/*"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}

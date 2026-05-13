@@ -1,0 +1,19 @@
+# macOS
+.DS_Store
+
+# 编辑器
+.vscode/
+.idea/
+*.swp
+
+# 日志
+*.log
+
+# 临时打包产物
+*.zip
+build/
+dist/
+
+# 注意：vendor/ 是 install.sh 下载的依赖，刻意提交到仓库——
+# 1. Chrome Web Store 上架必须打进 zip 一起提交
+# 2. 锁定版本，避免重新跑 install.sh 时 CDN 内容飘移

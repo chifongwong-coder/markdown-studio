@@ -1,0 +1,190 @@
+/* md-viewer 主题样式。亮/暗自动跟随系统。
+ * 从 md2pdf_revise.py 的 build_full_html 移植，去掉 @page 等 PDF 专属规则。 */
+
+:root {
+  --md-bg: #ffffff;
+  --md-text: #2c3e50;
+  --md-heading: #1a1a2e;
+  --md-link: #3b82f6;
+  --md-code-bg: #f8f9fa;
+  --md-block-bg: #f4f6f9;
+  --md-border: #e2e8f0;
+  --md-stripe: #f8fafc;
+  --md-muted: #6b7280;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --md-bg: #1a1a2e;
+    --md-text: #e0e0e0;
+    --md-heading: #ffffff;
+    --md-link: #60a5fa;
+    --md-code-bg: #16213e;
+    --md-block-bg: #0f3460;
+    --md-border: #334155;
+    --md-stripe: #1e293b;
+    --md-muted: #94a3b8;
+  }
+}
+
+body.md-viewer-body {
+  margin: 0;
+  padding: 0;
+  background: var(--md-bg);
+  color: var(--md-text);
+  font-family:
+    "Noto Serif CJK SC", "Source Han Serif SC", "Songti SC",
+    "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
+    -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.75;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+article.md-viewer-content {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 2.4em 1.6em 4em;
+  box-sizing: border-box;
+  overflow-wrap: break-word;
+}
+
+/* 标题 */
+.md-viewer-content h1,
+.md-viewer-content h2,
+.md-viewer-content h3,
+.md-viewer-content h4,
+.md-viewer-content h5,
+.md-viewer-content h6 {
+  color: var(--md-heading);
+  font-family:
+    "Noto Sans CJK SC", "Source Han Sans SC", "PingFang SC",
+    "Hiragino Sans GB", -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 700;
+  line-height: 1.35;
+  margin: 1.6em 0 0.6em;
+}
+.md-viewer-content h1 {
+  font-size: 2em;
+  border-bottom: 2.5px solid var(--md-link);
+  padding-bottom: 0.25em;
+  margin-top: 0.4em;
+}
+.md-viewer-content h2 {
+  font-size: 1.5em;
+  border-bottom: 1px solid var(--md-border);
+  padding-bottom: 0.2em;
+}
+.md-viewer-content h3 { font-size: 1.25em; }
+.md-viewer-content h4 { font-size: 1.1em; }
+
+.md-viewer-content p { margin: 0.8em 0; }
+.md-viewer-content a { color: var(--md-link); text-decoration: none; }
+.md-viewer-content a:hover { text-decoration: underline; }
+
+/* 内联代码 */
+.md-viewer-content :not(pre) > code {
+  font-family:
+    "JetBrains Mono", "Fira Code", "Source Code Pro", Menlo,
+    Consolas, "Liberation Mono", monospace;
+  background: var(--md-code-bg);
+  padding: 0.12em 0.4em;
+  border-radius: 3px;
+  border: 1px solid var(--md-border);
+  font-size: 0.88em;
+  font-variant-ligatures: none;
+}
+
+/* 代码块 */
+.md-viewer-content pre {
+  background: #272822;
+  color: #f8f8f2;
+  border-radius: 6px;
+  padding: 1em 1.2em;
+  margin: 1em 0;
+  overflow-x: auto;
+  font-size: 0.92em;
+  line-height: 1.55;
+}
+.md-viewer-content pre code,
+.md-viewer-content pre code.hljs {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  font-family:
+    "JetBrains Mono", "Fira Code", "Source Code Pro", Menlo,
+    Consolas, "Liberation Mono", monospace;
+}
+
+/* 表格 */
+.md-viewer-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1em 0;
+  font-size: 0.95em;
+}
+.md-viewer-content th,
+.md-viewer-content td {
+  padding: 0.55em 0.85em;
+  border: 1px solid var(--md-border);
+  text-align: left;
+  overflow-wrap: break-word;
+}
+.md-viewer-content th {
+  background: var(--md-block-bg);
+  font-weight: 600;
+}
+.md-viewer-content tr:nth-child(even) {
+  background: var(--md-stripe);
+}
+
+/* 引用 */
+.md-viewer-content blockquote {
+  border-left: 4px solid var(--md-link);
+  margin: 1em 0;
+  padding: 0.4em 1em;
+  background: var(--md-block-bg);
+  border-radius: 0 5px 5px 0;
+}
+.md-viewer-content blockquote p { margin: 0.3em 0; }
+
+/* 列表 */
+.md-viewer-content ul,
+.md-viewer-content ol { padding-left: 1.8em; margin: 0.7em 0; }
+.md-viewer-content li { margin: 0.25em 0; }
+
+/* 分割线 */
+.md-viewer-content hr {
+  border: none;
+  height: 1px;
+  background: var(--md-border);
+  margin: 2em 0;
+}
+
+/* 图片 */
+.md-viewer-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+  margin: 0.8em 0;
+}
+
+/* 公式 */
+.md-viewer-content .math-display {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+.md-viewer-content .math-inline { display: inline-block; }
+.md-viewer-content .katex { font-size: 1.05em; }
+.md-viewer-content .katex-display { margin: 1em 0 !important; }
+
+/* 暗色模式下覆盖 highlight.js monokai 之外的细节 */
+@media (prefers-color-scheme: dark) {
+  .md-viewer-content :not(pre) > code {
+    color: #fbbf24;
+  }
+}
