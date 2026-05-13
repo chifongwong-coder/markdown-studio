@@ -61,6 +61,17 @@
     // Syntax highlighting.
     window.MdViewer.highlightCode(article);
 
+    // Wrap each table in a scrollable container so wide tables on narrow
+    // viewports scroll horizontally inside the table area instead of pushing
+    // the whole article off-screen.
+    article.querySelectorAll('table').forEach((tbl) => {
+      if (tbl.parentElement && tbl.parentElement.classList.contains('md-table-wrap')) return;
+      const wrap = document.createElement('div');
+      wrap.className = 'md-table-wrap';
+      tbl.parentNode.insertBefore(wrap, tbl);
+      wrap.appendChild(tbl);
+    });
+
     // Use the first h1 as the document title when available.
     const h1 = article.querySelector('h1');
     if (h1) {

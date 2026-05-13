@@ -80,24 +80,14 @@ naive Markdown-with-math viewers. This extension's pipeline:
 
 See `lib/render.js` for the implementation.
 
-## Chrome Web Store submission checklist
+## Building the Chrome Web Store zip
 
-| Item | Status | Notes |
-|------|--------|-------|
-| Manifest V3 | ✅ | `manifest.json` |
-| No remote code | ✅ | All dependencies vendored |
-| Minimal permissions | ✅ | Just `content_scripts`; no `tabs` / `history` / `storage` |
-| Icons 16/48/128 | ⚠️ | Replace placeholders before submitting |
-| Screenshot 1280×800 | ⚠️ | Capture a math-rich .md preview |
-| Privacy policy URL | ⚠️ | Write a short page stating "no data is collected; all rendering happens locally" |
-| Developer registration | ⚠️ | $5 one-time fee |
-
-Steps once the above are ready:
-
-1. Register at [Chrome Web Store Developer Dashboard](https://chrome.google.com/webstore/devconsole).
-2. Zip the entire `md-viewer/` directory (vendor included) and upload.
-3. Fill in description, screenshots, and the privacy policy URL.
-4. Submit. Review typically takes 1–7 days.
+Run `./package.sh`. It reads the version from `manifest.json`, validates
+that every runtime file is present, and writes
+`build/md-viewer-<version>.zip` containing only what Chrome needs at
+runtime plus `LICENSE` and `vendor/LICENSES.txt`. Development assets
+(this README, test fixtures, screenshots, install scripts, icon
+sources, etc.) are excluded automatically.
 
 ## Known limits
 
