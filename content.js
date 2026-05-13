@@ -11,8 +11,26 @@
 (function () {
   'use strict';
 
-  /** Decide whether this page is Chrome's default text/plain markdown view. */
+  /** Decide whether this page is Chrome's default text/plain markdown view.
+   *  We only take over if the URL really looks like a Markdown file or the
+   *  Content-Type is text/markdown / text/plain — otherwise some other
+   *  extension (or server-rendered HTML) might already own the page. */
+  function isMarkdownUrl() {
+    try {
+      const path = new URL(location.href).pathname.toLowerCase();
+      return /\.(md|markdown|mdown)$/.test(path);
+    } catch (e) {
+      return false;
+    }
+  }
+  function isMarkdownLike() {
+    if (isMarkdownUrl()) return true;
+    const ct = (document.contentType || '').toLowerCase();
+    return ct === 'text/markdown' || ct === 'text/x-markdown';
+  }
+
   function getRawMarkdown() {
+    if (!isMarkdownLike()) return null;
     const body = document.body;
     if (!body) return null;
 
