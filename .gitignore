@@ -14,6 +14,9 @@
 build/
 dist/
 
+# Store-submission screenshot masters (we only track the 1280x800 deliverables)
+screenshots/*-original.png
+
 # Note: vendor/ is downloaded by install.sh but deliberately committed:
 #   1. Chrome Web Store submission requires every dependency to ship in the zip.
 #   2. Pinning the files prevents CDN drift between re-runs of install.sh.
