@@ -1,24 +1,28 @@
-// 注入入口：从页面里抓取原始 markdown 文本，跑渲染流水线，把页面替换成 HTML。
+// Injection entry point: grab the raw markdown text the page is displaying,
+// run it through the render pipeline, and replace the page body with the
+// rendered HTML.
 //
-// Chrome 默认行为：把 .md 文件当 text/plain 显示——内容包在 <body><pre>...</pre></body> 里。
-// 我们只在「页面看起来是纯文本展示」时才接管；如果服务器已经返回了渲染好的 HTML（比如
-// GitHub raw 之外的 markdown 站），就什么都不做，避免破坏用户内容。
+// Chrome's default behavior for .md files is to serve them as text/plain,
+// wrapping the file content in <body><pre>...</pre></body>. We only take over
+// when the page looks like that plain-text view. If a server pre-rendered the
+// markdown to HTML (which would have many body children), we leave it alone
+// so we don't trash the user's content.
 
 (function () {
   'use strict';
 
-  /** 判断当前页面是不是 Chrome 默认的 text/plain markdown 展示。 */
+  /** Decide whether this page is Chrome's default text/plain markdown view. */
   function getRawMarkdown() {
     const body = document.body;
     if (!body) return null;
 
-    // 典型形态：<body><pre>...</pre></body>，可能 body 还有空白文本节点
+    // Typical shape: <body><pre>...</pre></body>, possibly with stray whitespace.
     const pre = body.querySelector(':scope > pre');
     if (pre && body.children.length === 1) {
       return pre.textContent || '';
     }
 
-    // 另一种可能：内容直接挂在 body 上（很少见）
+    // Less common: content sitting directly on body.
     if (body.children.length === 0) {
       const text = body.textContent || '';
       if (text.trim().length > 0) return text;
@@ -30,7 +34,7 @@
   function renderInto(md) {
     const html = window.MdViewer.renderMarkdown(md);
 
-    // 用 article 包裹便于 CSS 定位
+    // Wrap in <article> so CSS can target our root easily.
     const article = document.createElement('article');
     article.className = 'md-viewer-content';
     article.innerHTML = html;
@@ -39,32 +43,33 @@
     document.body.appendChild(article);
     document.body.classList.add('md-viewer-body');
 
-    // 代码高亮
+    // Syntax highlighting.
     window.MdViewer.highlightCode(article);
 
-    // 修正 <title>：用第一个 h1 作为标题（如果有）
+    // Use the first h1 as the document title when available.
     const h1 = article.querySelector('h1');
     if (h1) {
       const t = h1.textContent.trim();
       if (t) document.title = t;
     }
 
-    // 挂载侧栏目录（h1–h6 不足 2 个时自动跳过）
+    // Mount the sidebar TOC (auto-skips when fewer than 2 headings).
     if (window.MdViewer.mountTOC) {
       try { window.MdViewer.mountTOC(article); }
       catch (e) { console.warn('[md-viewer] TOC mount failed:', e); }
     }
   }
 
-  /** 运行时注入扩展内的 CSS（用 chrome.runtime.getURL，让 CSS 内的相对 URL
-   *  正确解析到 chrome-extension://<id>/...，而不是当前文档所在的 file://...）。 */
+  /** Inject a stylesheet bundled with the extension via chrome.runtime.getURL,
+   *  so relative urls inside the CSS resolve under chrome-extension://<id>/...
+   *  rather than the current document's file:// origin. */
   function injectExtensionCSS(path) {
     return new Promise((resolve) => {
       const link = document.createElement('link');
       link.rel = 'stylesheet';
       link.href = chrome.runtime.getURL(path);
       link.onload = () => resolve();
-      link.onerror = () => resolve(); // 失败也继续，至少能用系统字体兜底
+      link.onerror = () => resolve(); // Press on even if a stylesheet fails.
       (document.head || document.documentElement).appendChild(link);
     });
   }
@@ -72,7 +77,8 @@
   async function main() {
     const md = getRawMarkdown();
     if (!md) return;
-    // 先把 KaTeX / 代码高亮的 CSS 准备好，避免渲染后字体 FOUC
+    // Inject KaTeX / highlight CSS up front to avoid a flash of unstyled
+    // math when rendering completes.
     await Promise.all([
       injectExtensionCSS('vendor/katex.min.css'),
       injectExtensionCSS('vendor/highlight-monokai.css'),
@@ -84,6 +90,6 @@
     }
   }
 
-  // document_end 时 DOM 已就绪
+  // At document_end the DOM is already in place.
   main();
 })();

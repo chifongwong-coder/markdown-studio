@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
-# 下载所有 vendor 依赖到 vendor/ 目录。
-# Chrome Web Store 政策禁止远程加载脚本，所以必须把依赖打包进扩展。
+# Download all vendor dependencies into vendor/.
+# Chrome Web Store policy forbids loading remote scripts, so every dependency
+# must ship inside the extension bundle.
 
 set -euo pipefail
 
@@ -22,7 +23,9 @@ curl -sSL "${JSD}/katex@${KATEX_VERSION}/dist/katex.min.js" -o vendor/katex.min.
 curl -sSL "${JSD}/katex@${KATEX_VERSION}/dist/katex.min.css" -o vendor/katex.min.css
 
 echo "==> katex fonts"
-# KaTeX 字体清单（来自其 dist/fonts/，共 60 个文件，按需挑常用 woff2）
+# KaTeX ships ~20 font families. Only woff2 is fetched because every browser
+# that runs MV3 supports it; the CSS lists woff/ttf fallbacks but they're never
+# requested when woff2 succeeds.
 FONTS=(
   KaTeX_AMS-Regular
   KaTeX_Caligraphic-Bold KaTeX_Caligraphic-Regular
@@ -38,8 +41,8 @@ for f in "${FONTS[@]}"; do
   curl -sSL "${JSD}/katex@${KATEX_VERSION}/dist/fonts/${f}.woff2" -o "vendor/fonts/${f}.woff2"
 done
 
-# KaTeX CSS 里的字体 URL 默认是相对路径 ./fonts/...，我们的 vendor/katex.min.css 加载时
-# 同样在 vendor/ 下，相对 vendor/fonts/ 正好——保持原样即可。
+# The font url() entries in katex.min.css are relative (./fonts/...), which
+# resolve correctly because the CSS itself sits next to vendor/fonts/.
 
 echo "==> highlight.js@${HLJS_VERSION}"
 curl -sSL "${JSD}/@highlightjs/cdn-assets@${HLJS_VERSION}/highlight.min.js" -o vendor/highlight.min.js
@@ -49,7 +52,8 @@ echo "==> dompurify@${DOMPURIFY_VERSION}"
 curl -sSL "${JSD}/dompurify@${DOMPURIFY_VERSION}/dist/purify.min.js" -o vendor/purify.min.js
 
 echo
-echo "完成。vendor/ 大小:"
+echo "Done. vendor/ size:"
 du -sh vendor/
 echo
-echo "下一步：在 chrome://extensions 开启开发者模式 → 加载已解压扩展 → 选择此目录"
+echo "Next: open chrome://extensions, enable Developer mode,"
+echo "click 'Load unpacked', and pick this directory."

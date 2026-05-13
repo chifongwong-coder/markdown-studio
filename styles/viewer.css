@@ -1,5 +1,4 @@
-/* md-viewer 主题样式。亮/暗自动跟随系统。
- * 从 md2pdf_revise.py 的 build_full_html 移植，去掉 @page 等 PDF 专属规则。 */
+/* md-viewer theme. Light/dark follows prefers-color-scheme. */
 
 :root {
   --md-bg: #ffffff;
@@ -50,7 +49,7 @@ article.md-viewer-content {
   overflow-wrap: break-word;
 }
 
-/* 标题 */
+/* Headings */
 .md-viewer-content h1,
 .md-viewer-content h2,
 .md-viewer-content h3,
@@ -83,7 +82,7 @@ article.md-viewer-content {
 .md-viewer-content a { color: var(--md-link); text-decoration: none; }
 .md-viewer-content a:hover { text-decoration: underline; }
 
-/* 内联代码 */
+/* Inline code */
 .md-viewer-content :not(pre) > code {
   font-family:
     "JetBrains Mono", "Fira Code", "Source Code Pro", Menlo,
@@ -96,7 +95,7 @@ article.md-viewer-content {
   font-variant-ligatures: none;
 }
 
-/* 代码块 */
+/* Code blocks */
 .md-viewer-content pre {
   background: #272822;
   color: #f8f8f2;
@@ -117,7 +116,7 @@ article.md-viewer-content {
     Consolas, "Liberation Mono", monospace;
 }
 
-/* 表格 */
+/* Tables */
 .md-viewer-content table {
   width: 100%;
   border-collapse: collapse;
@@ -139,7 +138,7 @@ article.md-viewer-content {
   background: var(--md-stripe);
 }
 
-/* 引用 */
+/* Blockquotes */
 .md-viewer-content blockquote {
   border-left: 4px solid var(--md-link);
   margin: 1em 0;
@@ -149,12 +148,12 @@ article.md-viewer-content {
 }
 .md-viewer-content blockquote p { margin: 0.3em 0; }
 
-/* 列表 */
+/* Lists */
 .md-viewer-content ul,
 .md-viewer-content ol { padding-left: 1.8em; margin: 0.7em 0; }
 .md-viewer-content li { margin: 0.25em 0; }
 
-/* 分割线 */
+/* Horizontal rule */
 .md-viewer-content hr {
   border: none;
   height: 1px;
@@ -162,7 +161,7 @@ article.md-viewer-content {
   margin: 2em 0;
 }
 
-/* 图片 */
+/* Images */
 .md-viewer-content img {
   max-width: 100%;
   height: auto;
@@ -170,7 +169,7 @@ article.md-viewer-content {
   margin: 0.8em 0;
 }
 
-/* 公式 */
+/* Math */
 .md-viewer-content .math-display {
   display: block;
   text-align: center;
@@ -182,7 +181,7 @@ article.md-viewer-content {
 .md-viewer-content .katex { font-size: 1.05em; }
 .md-viewer-content .katex-display { margin: 1em 0 !important; }
 
-/* 暗色模式下覆盖 highlight.js monokai 之外的细节 */
+/* Dark-mode tweaks beyond highlight.js monokai */
 @media (prefers-color-scheme: dark) {
   .md-viewer-content :not(pre) > code {
     color: #fbbf24;
@@ -190,7 +189,7 @@ article.md-viewer-content {
 }
 
 /* ============================================================
-   侧栏目录 TOC
+   Sidebar table of contents
    ============================================================ */
 
 .md-toc {
@@ -200,7 +199,8 @@ article.md-viewer-content {
   width: 280px;
   height: 100vh;
   overflow-y: auto;
-  /* 防止滚动穿透：滚到 TOC 顶/底时不带动正文一起滚 */
+  /* Stop scroll chaining: hitting the top/bottom of the TOC must
+     not start scrolling the main page. */
   overscroll-behavior: contain;
   padding: 1.4em 1em 2em;
   background: var(--md-stripe);
@@ -243,9 +243,9 @@ article.md-viewer-content {
   color: var(--md-text);
 }
 
-/* TOC 收起/展开把手——两个都是 body 的直接子元素，位置与外观对称。
-   两者位置都是 left:0 + top:50%；通过 translateX 让收起把手贴在 TOC 右边缘，
-   展开把手贴在屏幕左边缘。 */
+/* TOC hide/show tabs. Both are direct children of <body>, mirror each
+   other visually, anchored at left:0 + top:50%; translateX moves the hide
+   tab onto the TOC right edge while the show tab stays on the screen edge. */
 .md-toc-hide,
 .md-toc-handle {
   position: fixed;
@@ -271,14 +271,14 @@ article.md-viewer-content {
   color: var(--md-text);
 }
 
-/* 收起把手 «：贴在 TOC（280px 宽）的右边缘，凸出 TOC 之外 */
+/* Hide tab «: attaches to the right edge of the 280px-wide TOC */
 .md-toc-hide {
   transform: translate(280px, -50%);
   border-left: none;
   border-radius: 0 6px 6px 0;
 }
 
-/* 展开把手 »：屏幕左边缘，常驻但默认透明 */
+/* Show tab »: always mounted on the left screen edge; faded by default */
 .md-toc-handle {
   transform: translate(0, -50%);
   border-left: none;
@@ -287,12 +287,12 @@ article.md-viewer-content {
   pointer-events: none;
 }
 
-/* 收起状态：TOC + 收起把手一起滑出左侧；展开把手淡入 */
+/* When hidden: TOC and hide tab slide off-screen left; show tab fades in */
 body.md-toc-hidden .md-toc {
   transform: translateX(-100%);
 }
 body.md-toc-hidden .md-toc-hide {
-  transform: translate(-22px, -50%); /* 退到屏幕外 */
+  transform: translate(-22px, -50%); /* slide off-screen */
   opacity: 0;
   pointer-events: none;
 }
@@ -341,7 +341,7 @@ body.md-viewer-with-toc.md-toc-hidden {
   margin-top: 0.35em;
   visibility: hidden;
 }
-/* 有子节点的 item 才显示折叠箭头 */
+/* Only show the caret on items that have children */
 .md-toc-item:has(> .md-toc-children > .md-toc-item) > .md-toc-row > .md-toc-caret {
   visibility: visible;
 }
@@ -384,19 +384,19 @@ body.md-viewer-with-toc.md-toc-hidden {
   color: var(--md-link);
 }
 
-/* 有 TOC 时，正文区往右挪 */
+/* Push the article rightwards when a TOC is mounted */
 body.md-viewer-with-toc {
   padding-left: 280px;
   box-sizing: border-box;
 }
 
-/* 窄屏：直接隐藏 TOC（避免遮挡内容，简化交互） */
+/* Narrow viewport: hide the TOC entirely to keep reading uncluttered */
 @media (max-width: 960px) {
   .md-toc { display: none; }
   body.md-viewer-with-toc { padding-left: 0; }
 }
 
-/* TOC 滚动条样式（Webkit） */
+/* TOC scrollbar styling (Webkit) */
 .md-toc::-webkit-scrollbar { width: 8px; }
 .md-toc::-webkit-scrollbar-thumb {
   background: var(--md-border);
