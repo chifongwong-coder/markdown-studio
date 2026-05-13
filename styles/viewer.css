@@ -210,6 +210,7 @@ article.md-viewer-content {
   line-height: 1.5;
   z-index: 100;
   box-sizing: border-box;
+  transition: transform 0.22s ease;
 }
 
 .md-toc-header {
@@ -225,7 +226,8 @@ article.md-viewer-content {
   color: var(--md-heading);
   font-size: 0.95em;
 }
-.md-toc-toggle-all {
+.md-toc-toggle-all,
+.md-toc-hide {
   background: none;
   border: none;
   cursor: pointer;
@@ -235,9 +237,52 @@ article.md-viewer-content {
   border-radius: 3px;
   line-height: 1;
 }
-.md-toc-toggle-all:hover {
+.md-toc-toggle-all:hover,
+.md-toc-hide:hover {
   background: var(--md-block-bg);
   color: var(--md-text);
+}
+.md-toc-hide { font-size: 1.05em; }
+
+/* 收起后的左侧把手 */
+.md-toc-handle {
+  position: fixed;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  width: 22px;
+  height: 56px;
+  background: var(--md-stripe);
+  border: 1px solid var(--md-border);
+  border-left: none;
+  border-radius: 0 6px 6px 0;
+  cursor: pointer;
+  color: var(--md-muted);
+  font-size: 0.95em;
+  z-index: 99;
+  display: none;
+  padding: 0;
+  line-height: 56px;
+  text-align: center;
+  font-family: inherit;
+}
+.md-toc-handle:hover {
+  background: var(--md-block-bg);
+  color: var(--md-text);
+}
+
+/* 收起状态：TOC 滑出左侧 + 正文还原宽度 + 把手出现 */
+body.md-toc-hidden .md-toc {
+  transform: translateX(-100%);
+}
+body.md-toc-hidden .md-toc-handle {
+  display: block;
+}
+body.md-viewer-with-toc {
+  transition: padding-left 0.22s ease;
+}
+body.md-viewer-with-toc.md-toc-hidden {
+  padding-left: 0;
 }
 
 .md-toc ul {
