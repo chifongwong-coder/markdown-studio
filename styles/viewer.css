@@ -65,13 +65,18 @@ article.md-viewer-content {
   margin: 1.6em 0 0.6em;
 }
 /* When jumping to a heading via the TOC, leave a little breathing room
-   above the heading instead of pinning it flush against the viewport top. */
+   above the heading instead of pinning it flush against the viewport top.
+   text-wrap: balance distributes long heading text across lines evenly
+   (modern Chrome / Edge / Safari; older engines ignore it harmlessly). */
 .md-viewer-content h1,
 .md-viewer-content h2,
 .md-viewer-content h3,
 .md-viewer-content h4,
 .md-viewer-content h5,
-.md-viewer-content h6 { scroll-margin-top: 1em; }
+.md-viewer-content h6 {
+  scroll-margin-top: 1em;
+  text-wrap: balance;
+}
 
 .md-viewer-content h1 {
   font-size: 2em;
@@ -417,9 +422,44 @@ body.md-viewer-with-toc {
   box-sizing: border-box;
 }
 
-/* Narrow viewport: hide the TOC entirely to keep reading uncluttered */
-@media (max-width: 960px) {
-  .md-toc { display: none; }
+/* Tablet (600–960px): TOC becomes a slide-in drawer instead of taking up
+   a fixed 280px column. The article gets the full viewport width; the
+   drawer overlays the content (with a shadow) when the user toggles it on. */
+@media (min-width: 600px) and (max-width: 960px) {
+  body.md-viewer-with-toc { padding-left: 0; }
+  .md-toc {
+    box-shadow: 2px 0 14px rgba(0, 0, 0, 0.18);
+    transform: translateX(-100%);
+  }
+  body.md-viewer-with-toc:not(.md-toc-hidden) .md-toc {
+    transform: translateX(0);
+  }
+  /* Both handles vertically centered on the same edge; the visible one is
+     determined by md-toc-hidden state via opacity. */
+  body.md-viewer-with-toc:not(.md-toc-hidden) .md-toc-hide {
+    transform: translate(280px, -50%);
+    opacity: 1;
+    pointer-events: auto;
+  }
+  body.md-viewer-with-toc:not(.md-toc-hidden) .md-toc-handle {
+    opacity: 0;
+    pointer-events: none;
+  }
+  body.md-toc-hidden .md-toc-hide {
+    opacity: 0;
+    pointer-events: none;
+  }
+  body.md-toc-hidden .md-toc-handle {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+/* Phone / very narrow: hide the TOC entirely to keep reading uncluttered. */
+@media (max-width: 599px) {
+  .md-toc,
+  .md-toc-hide,
+  .md-toc-handle { display: none; }
   body.md-viewer-with-toc { padding-left: 0; }
 }
 
