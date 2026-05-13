@@ -49,18 +49,46 @@
     return null;
   }
 
+  /** Resolve a packaged asset URL, or null if the extension context has
+   *  been invalidated (e.g. the user just disabled or updated the extension
+   *  while the page is still open). */
+  function extensionAsset(path) {
+    try {
+      if (typeof chrome === 'undefined' || !chrome.runtime || !chrome.runtime.id) {
+        return null;
+      }
+      return chrome.runtime.getURL(path);
+    } catch (e) {
+      return null;
+    }
+  }
+
   /** Replace the page's favicon with our bundled icon. Necessary because
-   *  Chrome caches favicons in its local Favicons database and may continue
-   *  showing an old icon set by a previously-installed Markdown extension
-   *  even after that extension is uninstalled. Explicitly setting a new
-   *  <link rel="icon"> overrides the cached entry. */
+   *  Chrome caches favicons keyed by URL and may continue showing an old
+   *  icon set by a previously-installed Markdown extension even after that
+   *  extension is uninstalled. Explicitly setting a new <link rel="icon">
+   *  overrides the cached entry. */
   function setFavicon() {
+    const url = extensionAsset('icons/48.png');
+    if (!url) return;
     document.querySelectorAll('link[rel~="icon"]').forEach((l) => l.remove());
     const link = document.createElement('link');
     link.rel = 'icon';
     link.type = 'image/png';
-    link.href = chrome.runtime.getURL('icons/48.png');
+    link.href = url;
     (document.head || document.documentElement).appendChild(link);
+  }
+
+  /** Insert a <base href> matching the document URL so relative paths in
+   *  the rendered markdown (most commonly <img src="./pic.png">) keep
+   *  resolving correctly after we replace document.body's contents.
+   *  No-op when a <base> already exists. */
+  function ensureBaseHref() {
+    if (document.querySelector('base[href]')) return;
+    const base = document.createElement('base');
+    base.href = location.href;
+    const head = document.head || document.documentElement;
+    head.insertBefore(base, head.firstChild);
   }
 
   function renderInto(md) {
@@ -70,6 +98,11 @@
     const article = document.createElement('article');
     article.className = 'md-viewer-content';
     article.innerHTML = html;
+
+    // Insert <base href="..."> so relative image / link paths in the
+    // rendered markdown resolve against the original document URL even
+    // after we replace document.body.
+    ensureBaseHref();
 
     document.body.innerHTML = '';
     document.body.appendChild(article);
@@ -109,9 +142,11 @@
    *  rather than the current document's file:// origin. */
   function injectExtensionCSS(path) {
     return new Promise((resolve) => {
+      const url = extensionAsset(path);
+      if (!url) { resolve(); return; }
       const link = document.createElement('link');
       link.rel = 'stylesheet';
-      link.href = chrome.runtime.getURL(path);
+      link.href = url;
       link.onload = () => resolve();
       link.onerror = () => resolve(); // Press on even if a stylesheet fails.
       (document.head || document.documentElement).appendChild(link);
@@ -119,6 +154,12 @@
   }
 
   async function main() {
+    // Idempotency: if we (or a bfcache restore) have already rendered this
+    // page, skip. document.body carries the .md-viewer-body marker class
+    // exactly when render succeeded.
+    if (document.body && document.body.classList.contains('md-viewer-body')) {
+      return;
+    }
     const md = getRawMarkdown();
     if (!md) return;
     // Inject KaTeX / highlight CSS up front to avoid a flash of unstyled

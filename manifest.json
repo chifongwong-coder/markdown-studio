@@ -4,6 +4,9 @@
   "short_name": "MD Viewer",
   "version": "0.1.2",
   "description": "Render .md files with proper LaTeX math (KaTeX), syntax highlighting, GFM tables, and a collapsible TOC. 100% local rendering.",
+  "minimum_chrome_version": "88",
+  "offline_enabled": true,
+  "incognito": "split",
   "icons": {
     "16": "icons/16.png",
     "48": "icons/48.png",

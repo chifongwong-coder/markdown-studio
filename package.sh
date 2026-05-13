@@ -74,27 +74,26 @@ mkdir -p build
 OUT="build/md-viewer-${VERSION}.zip"
 rm -f "$OUT"
 
-# --- build the zip ---
-zip -r "$OUT" . \
-  -x '.git/*' \
-  -x '.gitignore' \
-  -x '.DS_Store' \
-  -x '*/.DS_Store' \
-  -x 'README.md' \
-  -x 'PRIVACY.md' \
-  -x 'STORE_LISTING.md' \
-  -x 'SCREENSHOTS.md' \
-  -x 'test.md' \
-  -x 'cjk-test.md' \
-  -x 'test-extract.mjs' \
-  -x 'install.sh' \
-  -x 'package.sh' \
-  -x 'screenshots/*' \
-  -x 'icons/image.png' \
-  -x 'icons/logo-draft.svg' \
-  -x 'icons/*.placeholder.png' \
-  -x '*.zip' \
-  -x 'build/*' \
+# --- build the zip via an explicit allowlist (not exclude list) so a future
+#     stray file (.env, .vscode/, secret.txt, etc.) cannot accidentally ship. ---
+zip -r "$OUT" \
+  manifest.json \
+  content.js \
+  LICENSE \
+  lib \
+  styles \
+  icons/16.png \
+  icons/48.png \
+  icons/128.png \
+  vendor/marked.min.js \
+  vendor/katex.min.js \
+  vendor/katex.min.css \
+  vendor/highlight.min.js \
+  vendor/highlight-monokai.css \
+  vendor/purify.min.js \
+  vendor/LICENSES.txt \
+  vendor/fonts \
+  -x '*.DS_Store' \
   >/dev/null
 
 # --- report ---
