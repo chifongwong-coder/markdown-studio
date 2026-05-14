@@ -12,6 +12,8 @@ MARKED_VERSION="14.1.3"
 KATEX_VERSION="0.16.11"
 HLJS_VERSION="11.10.0"
 DOMPURIFY_VERSION="3.2.4"
+MARKED_FOOTNOTE_VERSION="1.2.4"
+MERMAID_VERSION="10.9.3"
 
 JSD="https://cdn.jsdelivr.net/npm"
 
@@ -50,6 +52,12 @@ curl -sSL "${JSD}/@highlightjs/cdn-assets@${HLJS_VERSION}/styles/monokai.min.css
 
 echo "==> dompurify@${DOMPURIFY_VERSION}"
 curl -sSL "${JSD}/dompurify@${DOMPURIFY_VERSION}/dist/purify.min.js" -o vendor/purify.min.js
+
+echo "==> marked-footnote@${MARKED_FOOTNOTE_VERSION}"
+curl -sSL "${JSD}/marked-footnote@${MARKED_FOOTNOTE_VERSION}/dist/index.umd.js" -o vendor/marked-footnote.min.js
+
+echo "==> mermaid@${MERMAID_VERSION}"
+curl -sSL "${JSD}/mermaid@${MERMAID_VERSION}/dist/mermaid.min.js" -o vendor/mermaid.min.js
 
 echo
 echo "Done. vendor/ size:"

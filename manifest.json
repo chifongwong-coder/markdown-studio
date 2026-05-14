@@ -2,8 +2,8 @@
   "manifest_version": 3,
   "name": "Markdown Viewer with Math",
   "short_name": "MD Viewer",
-  "version": "0.1.2",
-  "description": "Render .md files with proper LaTeX math (KaTeX), syntax highlighting, GFM tables, and a collapsible TOC. 100% local rendering.",
+  "version": "0.2.0",
+  "description": "Render .md files with KaTeX math, syntax highlighting, GFM tables, footnotes, and a collapsible TOC. Local-only.",
   "minimum_chrome_version": "88",
   "offline_enabled": true,
   "incognito": "split",
@@ -25,6 +25,7 @@
       "run_at": "document_end",
       "js": [
         "vendor/marked.min.js",
+        "vendor/marked-footnote.min.js",
         "vendor/katex.min.js",
         "vendor/highlight.min.js",
         "vendor/purify.min.js",

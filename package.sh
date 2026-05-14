@@ -28,6 +28,7 @@ REQUIRED=(
   lib/toc.js
   styles/viewer.css
   vendor/marked.min.js
+  vendor/marked-footnote.min.js
   vendor/katex.min.js
   vendor/katex.min.css
   vendor/highlight.min.js
@@ -86,6 +87,7 @@ zip -r "$OUT" \
   icons/48.png \
   icons/128.png \
   vendor/marked.min.js \
+  vendor/marked-footnote.min.js \
   vendor/katex.min.js \
   vendor/katex.min.css \
   vendor/highlight.min.js \
