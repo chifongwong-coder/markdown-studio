@@ -16,6 +16,7 @@ literal, and escaped `\$` must not trigger formula extraction.
 - **Syntax highlighting** — highlight.js, language auto-detected
 - **GFM** — tables, task lists, strikethrough, autolinks
 - **Pandoc-style footnotes** — `[^id]` references + a collected footnotes section
+- **Mermaid diagrams** — ` ```mermaid ` fenced blocks render to SVG (flowcharts, sequence, class, state, pie, gantt, etc.); theme follows light/dark mode
 - **Collapsible sidebar TOC** — auto-built from headings, click to scroll, scroll-driven active-section tracking, persists collapsed/expanded state
 - **Dark mode** — follows `prefers-color-scheme`
 - **Local files** — supports `file:///` paths (requires opt-in on the extension page)

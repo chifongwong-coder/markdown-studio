@@ -207,6 +207,30 @@ article.md-viewer-content {
 .md-viewer-content .katex { font-size: 1.05em; }
 .md-viewer-content .katex-display { margin: 1em 0 !important; }
 
+/* Mermaid diagrams */
+.md-viewer-content .md-mermaid {
+  display: block;
+  text-align: center;
+  margin: 1.2em 0;
+  overflow-x: auto;
+}
+.md-viewer-content .md-mermaid svg {
+  max-width: 100%;
+  height: auto;
+}
+.md-viewer-content .md-mermaid-error {
+  display: block;
+  background: var(--md-block-bg);
+  border-left: 4px solid #e74c3c;
+  padding: 0.6em 1em;
+  margin: 1em 0;
+  font-family: "JetBrains Mono", "Fira Code", Menlo, monospace;
+  font-size: 0.85em;
+  color: #e74c3c;
+  border-radius: 0 4px 4px 0;
+  white-space: pre-wrap;
+}
+
 /* Dark-mode tweaks beyond highlight.js monokai */
 @media (prefers-color-scheme: dark) {
   .md-viewer-content :not(pre) > code {

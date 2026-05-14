@@ -94,7 +94,11 @@
   }
 
   function renderInto(md) {
-    const html = window.MdViewer.renderMarkdown(md);
+    const result = window.MdViewer.renderMarkdown(md);
+    // renderMarkdown switched in v0.3 to returning {html, mermaidSources}.
+    // Earlier versions returned a bare string; keep a shim for safety.
+    const html = typeof result === 'string' ? result : result.html;
+    const mermaidSources = (result && result.mermaidSources) || [];
 
     // Wrap in <article> so CSS can target our root easily.
     const article = document.createElement('article');
@@ -136,6 +140,43 @@
     if (window.MdViewer.mountTOC) {
       try { window.MdViewer.mountTOC(article); }
       catch (e) { console.warn('[md-viewer] TOC mount failed:', e); }
+    }
+
+    // Render any mermaid diagrams asynchronously.
+    if (mermaidSources.length > 0) {
+      renderMermaidDiagrams(article, mermaidSources).catch((e) =>
+        console.warn('[md-viewer] mermaid render failed:', e));
+    }
+  }
+
+  /** Find <div class="md-mermaid" data-mermaid-id> placeholders inserted by
+   *  the renderer and ask the bundled mermaid library to fill each with an
+   *  SVG diagram. Theme follows the user's system color-scheme. */
+  async function renderMermaidDiagrams(article, sources) {
+    if (typeof mermaid === 'undefined' || !mermaid.initialize) return;
+    const placeholders = article.querySelectorAll('.md-mermaid[data-mermaid-id]');
+    if (placeholders.length === 0) return;
+    const dark = window.matchMedia &&
+                 window.matchMedia('(prefers-color-scheme: dark)').matches;
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: dark ? 'dark' : 'default',
+      securityLevel: 'strict',
+    });
+    let i = 0;
+    for (const el of placeholders) {
+      const idx = parseInt(el.dataset.mermaidId, 10);
+      const src = sources[idx - 1];
+      if (!src) continue;
+      i += 1;
+      try {
+        const { svg } = await mermaid.render('md-mermaid-' + idx + '-' + i, src);
+        el.innerHTML = svg;
+      } catch (e) {
+        const msg = String(e && e.message || e).slice(0, 200);
+        el.textContent = 'Mermaid error: ' + msg;
+        el.classList.add('md-mermaid-error');
+      }
     }
   }
 

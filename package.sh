@@ -34,6 +34,7 @@ REQUIRED=(
   vendor/highlight.min.js
   vendor/highlight-monokai.css
   vendor/purify.min.js
+  vendor/mermaid.min.js
   vendor/LICENSES.txt
   icons/16.png
   icons/48.png
@@ -93,6 +94,7 @@ zip -r "$OUT" \
   vendor/highlight.min.js \
   vendor/highlight-monokai.css \
   vendor/purify.min.js \
+  vendor/mermaid.min.js \
   vendor/LICENSES.txt \
   vendor/fonts \
   -x '*.DS_Store' \
