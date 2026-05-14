@@ -161,19 +161,43 @@
     mermaid.initialize({
       startOnLoad: false,
       theme: dark ? 'dark' : 'default',
+      // 'strict' makes mermaid HTML-escape labels and refuses any HTML inside
+      // text labels. Mermaid also runs DOMPurify on its own output before
+      // returning the SVG string.
       securityLevel: 'strict',
     });
     let i = 0;
     for (const el of placeholders) {
-      const idx = parseInt(el.dataset.mermaidId, 10);
+      // Defensive: only honor numeric ids. /^\d+$/ rejects "<svg>" / "0x1"
+      // and other coerce-to-number tricks a hostile markdown could plant in
+      // a placeholder smuggled past sanitize.
+      const idStr = el.dataset.mermaidId;
+      if (!/^\d+$/.test(idStr)) continue;
+      const idx = parseInt(idStr, 10);
       const src = sources[idx - 1];
       if (!src) continue;
+      // Tab navigation / bfcache eviction may have detached the article
+      // before we get here. Don't write innerHTML into a stranded node.
+      if (!el.isConnected) continue;
       i += 1;
       try {
         const { svg } = await mermaid.render('md-mermaid-' + idx + '-' + i, src);
-        el.innerHTML = svg;
+        if (!el.isConnected) continue;
+        // Second-pass sanitize: mermaid runs DOMPurify internally with its
+        // own allowlist, but a future CVE could slip through. We re-run with
+        // the SVG-friendly profile so any unexpected <script> or event
+        // handler gets stripped before insertion.
+        const safe = (typeof DOMPurify !== 'undefined')
+          ? DOMPurify.sanitize(svg, {
+              USE_PROFILES: { svg: true, svgFilters: true },
+              ADD_TAGS: ['foreignObject'],
+              FORBID_ATTR: ['onload', 'onclick', 'onerror', 'onmouseover'],
+            })
+          : svg;
+        el.innerHTML = safe;
       } catch (e) {
         const msg = String(e && e.message || e).slice(0, 200);
+        if (!el.isConnected) continue;
         el.textContent = 'Mermaid error: ' + msg;
         el.classList.add('md-mermaid-error');
       }
