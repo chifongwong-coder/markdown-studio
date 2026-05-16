@@ -207,10 +207,20 @@
 
   // Expose the print-time rerender entry to lib/toc.js's print buttons.
   // Defined here (not in render.js / toc.js) because content.js owns the
-  // mermaid lifecycle and the source cache.
+  // mermaid lifecycle and the source cache. Also expose:
+  //   - getRawMarkdown(): for the editor to seed its textarea with the
+  //     original .md text. Cached from the initial pass so it's still
+  //     available after document.body gets replaced.
+  //   - renderMermaidInto(article, sources): editor preview's mermaid
+  //     renderer, calls the same pipeline as initial render with the
+  //     current screen theme.
+  let _cachedRawMarkdown = '';
   function exposeMermaidRerender() {
     if (window.MdViewer) {
       window.MdViewer.rerenderMermaidForTheme = rerenderMermaidForTheme;
+      window.MdViewer.getRawMarkdown = () => _cachedRawMarkdown;
+      window.MdViewer.renderMermaidInto = (article, sources) =>
+        renderMermaidDiagrams(article, sources, screenMermaidTheme());
     }
   }
 
@@ -326,6 +336,9 @@
     }
     const md = getRawMarkdown();
     if (!md) return;
+    // Cache so the editor module can re-seed its textarea later, even
+    // after document.body's original <pre> has been swapped out.
+    _cachedRawMarkdown = md;
     // Inject KaTeX / highlight CSS up front to avoid a flash of unstyled
     // math when rendering completes.
     await Promise.all([

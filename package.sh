@@ -26,6 +26,7 @@ REQUIRED=(
   content.js
   lib/render.js
   lib/toc.js
+  lib/editor.js
   styles/viewer.css
   vendor/marked.min.js
   vendor/marked-footnote.min.js

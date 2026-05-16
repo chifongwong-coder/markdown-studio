@@ -3,6 +3,35 @@
 All notable changes to this extension are documented here. Versions follow
 the `manifest.json` `version` field.
 
+## 0.5.0
+
+### Added
+- **Edit mode.** An `Edit` button in the TOC header swaps the
+  rendered article for a full-viewport split view: a textarea with
+  the raw markdown on the left, a live preview that mirrors the
+  reading view on the right. Edits debounce-render to the preview
+  every 300 ms (math, mermaid, syntax highlighting, footnotes all
+  refresh). The toolbar exposes:
+  - `Save` -- creates a Blob of the textarea contents and triggers
+    a browser download with the original `.md` filename. The
+    extension cannot write back to the original file (no `file://`
+    write privilege; no remote-host privilege for http(s)), so
+    "save" is a download. Existing files are not modified.
+  - `Cancel` (or `Esc`) -- exits edit mode and restores the
+    previously-rendered article + the reader's scroll position.
+    In-memory edits are lost.
+  Edit mode hides the TOC sidebar, the show/hide tabs, and the
+  file-URL tip banner via a `body.md-editing` class; the raw
+  markdown that seeds the textarea is cached from the initial
+  render so it's still available after `document.body` has been
+  rewritten with the rendered HTML.
+
+### Build / tooling
+- New file `lib/editor.js` added to `content_scripts.js` in
+  manifest.json (and to `package.sh`'s required-files allowlist).
+  The pre-existing `lib/` directory inclusion in `package.sh`'s zip
+  command picks it up automatically.
+
 ## 0.4.0
 
 ### Added
