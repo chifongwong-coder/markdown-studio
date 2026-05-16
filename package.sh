@@ -9,7 +9,7 @@
 #   manifest.json, content.js, lib/, styles/, vendor/, icons/{16,48,128}.png,
 #   LICENSE.
 #
-# Excluded: git metadata, README, PRIVACY, STORE_LISTING, SCREENSHOTS,
+# Excluded: git metadata, README, PRIVACY, STORE_LISTING, CHANGELOG,
 # test fixtures, install/package scripts, screenshots/, icon source files
 # (image.png, logo-draft.svg), and previously built zips.
 
