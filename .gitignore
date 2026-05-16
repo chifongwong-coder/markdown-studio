@@ -14,6 +14,10 @@
 build/
 dist/
 
+# Test artefacts: PDF exports produced by clicking the PDF button while
+# iterating on print CSS. Not source.
+*.pdf
+
 # Store-submission screenshot masters (we only track the 1280x800 deliverables)
 screenshots/*-original.png
 

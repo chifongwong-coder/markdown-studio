@@ -284,7 +284,8 @@ article.md-viewer-content {
   line-height: 1.3;
   border: none;
 }
-.md-toc-toggle-all {
+.md-toc-toggle-all,
+.md-toc-print {
   background: none;
   border: none;
   cursor: pointer;
@@ -294,9 +295,20 @@ article.md-viewer-content {
   border-radius: 3px;
   line-height: 1;
 }
-.md-toc-toggle-all:hover {
+.md-toc-toggle-all:hover,
+.md-toc-print:hover {
   background: var(--md-block-bg);
   color: var(--md-text);
+}
+.md-toc-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.2em;
+}
+.md-toc-print {
+  font-size: 0.75em;
+  font-weight: 600;
+  letter-spacing: 0.04em;
 }
 
 /* TOC hide/show tabs. Both are direct children of <body>, mirror each
@@ -506,7 +518,8 @@ body.md-viewer-with-toc {
 .md-toc-caret:focus-visible,
 .md-toc-hide:focus-visible,
 .md-toc-handle:focus-visible,
-.md-toc-toggle-all:focus-visible {
+.md-toc-toggle-all:focus-visible,
+.md-toc-print:focus-visible {
   outline: 2px solid var(--md-link);
   outline-offset: 2px;
   border-radius: 3px;
@@ -524,34 +537,120 @@ body.md-viewer-with-toc {
   }
 }
 
+/* File-URL access reminder banner. Injected by content.js on http(s)
+ * renders only, dismissible, persisted via localStorage so it shows at
+ * most once per user-per-origin. Designed to be unobtrusive but
+ * noticeable: warm tinted bg, single line, fixed position at top so
+ * it doesn't shift article layout. Hidden in print. */
+.md-file-tip {
+  position: sticky;
+  top: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+  padding: 0.5em 1em;
+  font-size: 0.85em;
+  line-height: 1.4;
+  background: #fef3c7;
+  color: #78350f;
+  border-bottom: 1px solid #fbbf24;
+  font-family: var(--md-font);
+}
+.md-file-tip code {
+  background: rgba(120, 53, 15, 0.08);
+  padding: 0.05em 0.3em;
+  border-radius: 3px;
+  font-size: 0.95em;
+  color: inherit;
+  border: none;
+}
+.md-file-tip-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.3em;
+  height: 1.3em;
+  border-radius: 50%;
+  background: #d97706;
+  color: #fff;
+  font-style: italic;
+  font-weight: 700;
+  font-family: Georgia, serif;
+  font-size: 0.85em;
+  flex-shrink: 0;
+}
+.md-file-tip-text {
+  flex: 1 1 auto;
+}
+.md-file-tip-text strong {
+  font-weight: 600;
+}
+.md-file-tip-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #78350f;
+  font-size: 1.4em;
+  line-height: 1;
+  padding: 0 0.25em;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+.md-file-tip-close:hover {
+  background: rgba(120, 53, 15, 0.12);
+}
+.md-file-tip-close:focus-visible {
+  outline: 2px solid #78350f;
+  outline-offset: 1px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .md-file-tip {
+    background: #422006;
+    color: #fbbf24;
+    border-bottom-color: #92400e;
+  }
+  .md-file-tip code {
+    background: rgba(251, 191, 36, 0.12);
+  }
+  .md-file-tip-close {
+    color: #fbbf24;
+  }
+  .md-file-tip-close:hover {
+    background: rgba(251, 191, 36, 0.18);
+  }
+}
+
 /* ============================================================
    Print stylesheet
    ============================================================ */
 
 @media print {
-  /* Drop the TOC + handles + dark background; switch to ink-friendly colors. */
+  /* ----- Common (theme-independent) print rules ----- */
+
+  /* Standard print margins. The browser-generated page header/footer
+   * (date, URL, page numbers) lives in this margin band. */
+  @page {
+    margin: 0.7in 0.6in;
+  }
+  /* Hide the TOC sidebar and its show/hide tabs in print. The PDF
+   * action buttons live inside the TOC so they're hidden via the
+   * same rule -- no extra selector needed. Also hide the
+   * file-URL-access reminder banner so it doesn't bleed into PDFs. */
   .md-toc,
   .md-toc-hide,
-  .md-toc-handle { display: none !important; }
-  body.md-viewer-with-toc,
-  body.md-viewer-body {
-    padding-left: 0 !important;
-    background: #ffffff !important;
-    color: #000000 !important;
-  }
+  .md-toc-handle,
+  .md-file-tip { display: none !important; }
   .md-viewer-content {
     max-width: none;
     padding: 0;
   }
-  .md-viewer-content pre,
-  .md-viewer-content :not(pre) > code {
-    background: #f4f4f4 !important;
-    color: #000 !important;
-    border-color: #ccc !important;
-  }
-  .md-viewer-content a {
-    color: #000;
-    text-decoration: underline;
+  /* On paper, scrollable code blocks can't scroll. Wrap long lines so
+   * nothing is silently cut off at the page edge. */
+  .md-viewer-content pre {
+    white-space: pre-wrap;
+    word-break: break-word;
   }
   .md-viewer-content h1,
   .md-viewer-content h2,
@@ -559,4 +658,155 @@ body.md-viewer-with-toc {
   .md-viewer-content pre,
   .md-viewer-content table,
   .md-viewer-content .math-display { break-inside: avoid; }
-}
+  /* Cap mermaid SVG height in print so a tall flowchart doesn't eat a
+   * full page on its own. */
+  .md-viewer-content .md-mermaid svg {
+    max-height: 4in;
+  }
+  /* Try to keep the footnotes section from splitting awkwardly across
+   * page breaks. */
+  .md-viewer-content [data-footnotes] {
+    break-inside: avoid-page;
+  }
+
+  /* ============================================================
+   * Print theme: force light regardless of the on-screen theme.
+   * White page, dark text, GitHub-Light syntax colours, mermaid
+   * forced to light. content.js's PDF button also asks mermaid to
+   * re-render with the default (light) theme before window.print()
+   * runs, so the SVG itself matches.
+   *
+   * The redefined --md-* values below override the system ones so
+   * derived styles (table stripes, blockquote bg, borders, links)
+   * stay light even when the user's system is in dark mode.
+   * ============================================================ */
+  :root {
+    --md-bg: #ffffff;
+    --md-text: #2c3e50;
+    --md-heading: #1a1a2e;
+    --md-link: #3b82f6;
+    --md-code-bg: #f8f9fa;
+    --md-block-bg: #f4f6f9;
+    --md-border: #e2e8f0;
+    --md-stripe: #f8fafc;
+    --md-muted: #6b7280;
+  }
+  .md-viewer-with-toc,
+  .md-viewer-body {
+    padding-left: 0 !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+  .md-viewer-content pre,
+  .md-viewer-content :not(pre) > code {
+    background: #f4f4f4 !important;
+    color: #000 !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 4px !important;
+    /* "Background graphics" is off by default in macOS / Windows print
+     * dialogs. Force preservation so the code block has a visible
+     * boundary even when the user doesn't enable backgrounds. */
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  .md-viewer-content a {
+    color: #000;
+    text-decoration: underline;
+  }
+  /* Highlight.js Monokai is designed for dark backgrounds; recolour
+   * the spans in GitHub-Light hues so printed code stays readable on
+   * a white page. */
+  .md-viewer-content .hljs,
+  .md-viewer-content .hljs * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  .md-viewer-content .hljs { color: #24292e !important; }
+  .md-viewer-content .hljs-comment,
+  .md-viewer-content .hljs-quote {
+    color: #6a737d !important;
+    font-style: italic;
+  }
+  .md-viewer-content .hljs-keyword,
+  .md-viewer-content .hljs-selector-tag,
+  .md-viewer-content .hljs-doctag,
+  .md-viewer-content .hljs-section,
+  .md-viewer-content .hljs-name {
+    color: #d73a49 !important;
+  }
+  .md-viewer-content .hljs-string,
+  .md-viewer-content .hljs-bullet,
+  .md-viewer-content .hljs-symbol,
+  .md-viewer-content .hljs-regexp {
+    color: #032f62 !important;
+  }
+  .md-viewer-content .hljs-number,
+  .md-viewer-content .hljs-literal,
+  .md-viewer-content .hljs-variable,
+  .md-viewer-content .hljs-template-variable,
+  .md-viewer-content .hljs-attr,
+  .md-viewer-content .hljs-attribute,
+  .md-viewer-content .hljs-tag,
+  .md-viewer-content .hljs-type {
+    color: #005cc5 !important;
+  }
+  .md-viewer-content .hljs-title,
+  .md-viewer-content .hljs-built_in,
+  .md-viewer-content .hljs-class,
+  .md-viewer-content .hljs-class .hljs-title {
+    color: #6f42c1 !important;
+  }
+  .md-viewer-content .hljs-params,
+  .md-viewer-content .hljs-meta,
+  .md-viewer-content .hljs-punctuation {
+    color: #24292e !important;
+  }
+  .md-viewer-content .hljs-deletion {
+    color: #b31d28 !important;
+    background-color: #ffeef0 !important;
+  }
+  .md-viewer-content .hljs-addition {
+    color: #22863a !important;
+    background-color: #e6ffed !important;
+  }
+  .md-viewer-content .hljs-emphasis { font-style: italic; }
+  .md-viewer-content .hljs-strong { font-weight: 600; }
+  /* Mermaid forced light. If the page was screen-rendered in dark
+   * mode the SVG's inline dark fills survive print otherwise. */
+  .md-viewer-content .md-mermaid svg .node rect,
+  .md-viewer-content .md-mermaid svg .node circle,
+  .md-viewer-content .md-mermaid svg .node ellipse,
+  .md-viewer-content .md-mermaid svg .node polygon,
+  .md-viewer-content .md-mermaid svg .node path,
+  .md-viewer-content .md-mermaid svg .cluster rect {
+    fill: #ffffff !important;
+    stroke: #333333 !important;
+  }
+  .md-viewer-content .md-mermaid svg .nodeLabel,
+  .md-viewer-content .md-mermaid svg .nodeLabel *,
+  .md-viewer-content .md-mermaid svg .edgeLabel,
+  .md-viewer-content .md-mermaid svg .edgeLabel *,
+  .md-viewer-content .md-mermaid svg text,
+  .md-viewer-content .md-mermaid svg foreignObject div,
+  .md-viewer-content .md-mermaid svg foreignObject span {
+    color: #000000 !important;
+    fill: #000000 !important;
+    background: transparent !important;
+  }
+  .md-viewer-content .md-mermaid svg .edgePath path,
+  .md-viewer-content .md-mermaid svg .flowchart-link {
+    stroke: #555555 !important;
+    fill: none !important;
+  }
+  .md-viewer-content .md-mermaid svg .arrowheadPath,
+  .md-viewer-content .md-mermaid svg marker path {
+    fill: #555555 !important;
+    stroke: #555555 !important;
+  }
+  .md-viewer-content .md-mermaid svg,
+  .md-viewer-content .md-mermaid svg * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  }

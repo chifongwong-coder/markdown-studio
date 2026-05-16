@@ -18,6 +18,7 @@ literal, and escaped `\$` must not trigger formula extraction.
 - **Pandoc-style footnotes** — `[^id]` references + a collected footnotes section
 - **Mermaid diagrams** — ` ```mermaid ` fenced blocks render to SVG (flowcharts, sequence, class, state, pie, gantt, etc.); theme follows light/dark mode
 - **Collapsible sidebar TOC** — auto-built from headings, click to scroll, scroll-driven active-section tracking, persists collapsed/expanded state
+- **Save as PDF / print** — `PDF` button in the TOC header triggers the browser's print pipeline; math, mermaid, code, and footnotes all paginate with on-screen fidelity
 - **Dark mode** — follows `prefers-color-scheme`
 - **Local files** — supports `file:///` paths (requires opt-in on the extension page)
 - **Sanitized output** — rendered HTML passes through DOMPurify before being written to the DOM

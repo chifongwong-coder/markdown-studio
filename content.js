@@ -93,6 +93,57 @@
     head.insertBefore(base, head.firstChild);
   }
 
+  /** Insert a one-line tip pointing users at the file-URL permission
+   *  toggle in chrome://extensions. Shown only on http(s) renders --
+   *  if the user is already on a file:// page, the access is by
+   *  definition enabled and there's nothing to remind them about.
+   *  Dismissal persists in localStorage so a tip appears at most once
+   *  per user-per-origin. Hidden in print via @media print rule. */
+  const FILE_TIP_KEY = 'md-viewer-file-tip-dismissed-v1';
+  function maybeMountFileAccessTip(host) {
+    try {
+      const proto = window.location.protocol;
+      if (proto !== 'http:' && proto !== 'https:') return;
+      if (window.localStorage && window.localStorage.getItem(FILE_TIP_KEY)) return;
+    } catch (e) { /* localStorage blocked => still show; that's fine */ }
+    const bar = document.createElement('div');
+    bar.className = 'md-file-tip';
+    bar.setAttribute('role', 'status');
+    const icon = document.createElement('span');
+    icon.className = 'md-file-tip-icon';
+    icon.textContent = 'i';
+    icon.setAttribute('aria-hidden', 'true');
+    const text = document.createElement('span');
+    text.className = 'md-file-tip-text';
+    text.appendChild(document.createTextNode('Local '));
+    const codeMd = document.createElement('code');
+    codeMd.textContent = '.md';
+    text.appendChild(codeMd);
+    text.appendChild(document.createTextNode(' files won’t render until you enable '));
+    const strong = document.createElement('strong');
+    strong.textContent = 'Allow access to file URLs';
+    text.appendChild(strong);
+    text.appendChild(document.createTextNode(' on this extension’s details page at '));
+    const codeUrl = document.createElement('code');
+    codeUrl.textContent = 'chrome://extensions';
+    text.appendChild(codeUrl);
+    text.appendChild(document.createTextNode('.'));
+    const close = document.createElement('button');
+    close.className = 'md-file-tip-close';
+    close.type = 'button';
+    close.setAttribute('aria-label', 'Dismiss');
+    close.textContent = '×';
+    close.addEventListener('click', () => {
+      try { if (window.localStorage) window.localStorage.setItem(FILE_TIP_KEY, '1'); }
+      catch (e) { /* swallow -- next page load will re-show; acceptable */ }
+      bar.remove();
+    });
+    bar.appendChild(icon);
+    bar.appendChild(text);
+    bar.appendChild(close);
+    host.insertBefore(bar, host.firstChild);
+  }
+
   function renderInto(md) {
     const result = window.MdViewer.renderMarkdown(md);
     // renderMarkdown switched in v0.3 to returning {html, mermaidSources}.
@@ -113,6 +164,7 @@
     document.body.innerHTML = '';
     document.body.appendChild(article);
     document.body.classList.add('md-viewer-body');
+    maybeMountFileAccessTip(document.body);
     setFavicon();
 
     // Syntax highlighting.
@@ -142,25 +194,44 @@
       catch (e) { console.warn('[md-viewer] TOC mount failed:', e); }
     }
 
-    // Render any mermaid diagrams asynchronously.
+    // Render any mermaid diagrams asynchronously. Stash sources +
+    // article reference so the PDF print buttons can re-render with
+    // a different theme later without re-parsing the .md.
     if (mermaidSources.length > 0) {
-      renderMermaidDiagrams(article, mermaidSources).catch((e) =>
-        console.warn('[md-viewer] mermaid render failed:', e));
+      _mermaidSources = mermaidSources;
+      _mermaidArticle = article;
+      renderMermaidDiagrams(article, mermaidSources, screenMermaidTheme())
+        .catch((e) => console.warn('[md-viewer] mermaid render failed:', e));
     }
   }
 
-  /** Find <div class="md-mermaid" data-mermaid-id> placeholders inserted by
-   *  the renderer and ask the bundled mermaid library to fill each with an
-   *  SVG diagram. Theme follows the user's system color-scheme. */
-  async function renderMermaidDiagrams(article, sources) {
+  // Expose the print-time rerender entry to lib/toc.js's print buttons.
+  // Defined here (not in render.js / toc.js) because content.js owns the
+  // mermaid lifecycle and the source cache.
+  function exposeMermaidRerender() {
+    if (window.MdViewer) {
+      window.MdViewer.rerenderMermaidForTheme = rerenderMermaidForTheme;
+    }
+  }
+
+  // Module-scoped state used by the rerender path (PDF print button).
+  // _mermaidSources keeps the source markdown for each diagram so we can
+  // ask mermaid to re-render with a different theme without re-parsing
+  // the whole .md document. _mermaidArticle is the live host element.
+  let _mermaidSources = [];
+  let _mermaidArticle = null;
+
+  /** Initialise mermaid with a theme name and re-render all placeholders
+   *  using the cached sources. Returns when every diagram has finished
+   *  rendering (or failed). Safe to call repeatedly; the call is a no-op
+   *  when there are no diagrams. */
+  async function renderMermaidDiagrams(article, sources, theme) {
     if (typeof mermaid === 'undefined' || !mermaid.initialize) return;
     const placeholders = article.querySelectorAll('.md-mermaid[data-mermaid-id]');
     if (placeholders.length === 0) return;
-    const dark = window.matchMedia &&
-                 window.matchMedia('(prefers-color-scheme: dark)').matches;
     mermaid.initialize({
       startOnLoad: false,
-      theme: dark ? 'dark' : 'default',
+      theme,
       // 'strict' makes mermaid HTML-escape labels and refuses any HTML inside
       // text labels. Mermaid also runs DOMPurify on its own output before
       // returning the SVG string.
@@ -180,8 +251,11 @@
       // before we get here. Don't write innerHTML into a stranded node.
       if (!el.isConnected) continue;
       i += 1;
+      // Salt the id so successive renders don't collide (mermaid keeps a
+      // module-level registry of rendered diagram ids).
+      const renderId = 'md-mermaid-' + idx + '-' + i + '-' + Date.now();
       try {
-        const { svg } = await mermaid.render('md-mermaid-' + idx + '-' + i, src);
+        const { svg } = await mermaid.render(renderId, src);
         if (!el.isConnected) continue;
         // Second-pass sanitize: mermaid runs DOMPurify internally with its
         // own allowlist, but a future CVE could slip through. We re-run with
@@ -202,6 +276,29 @@
         el.classList.add('md-mermaid-error');
       }
     }
+  }
+
+  /** Return the theme name mermaid should use for the current screen
+   *  scheme (i.e. the on-load default). */
+  function screenMermaidTheme() {
+    const dark = window.matchMedia &&
+                 window.matchMedia('(prefers-color-scheme: dark)').matches;
+    return dark ? 'dark' : 'default';
+  }
+
+  /** Public entry for the print button: re-render every diagram with the
+   *  requested theme ('light' / 'dark' / 'screen'). With 'screen' we use
+   *  whatever matchMedia(prefers-color-scheme) currently reports, which
+   *  lets the afterprint handler easily restore the on-screen theme.
+   *  CSS-only attempts to recolour mermaid output for print were unable
+   *  to reach every span/tspan reliably; a real re-render is the only
+   *  bulletproof path. */
+  async function rerenderMermaidForTheme(mode) {
+    if (!_mermaidArticle || _mermaidSources.length === 0) return;
+    const theme = mode === 'light' ? 'default'
+                 : mode === 'dark' ? 'dark'
+                 : screenMermaidTheme();
+    await renderMermaidDiagrams(_mermaidArticle, _mermaidSources, theme);
   }
 
   /** Inject a stylesheet bundled with the extension via chrome.runtime.getURL,
@@ -237,6 +334,9 @@
     ]);
     try {
       renderInto(md);
+      // Expose the mermaid re-render entry for the PDF buttons in toc.js
+      // after the article + sources are populated.
+      exposeMermaidRerender();
     } catch (e) {
       console.error('[md-viewer] render failed:', e);
     }
