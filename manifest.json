@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
-  "name": "Markdown Viewer with Math",
-  "short_name": "MD Viewer",
+  "name": "Markdown Studio",
+  "short_name": "MD Studio",
   "version": "0.5.0",
   "description": "Render .md files with KaTeX math, code highlighting, tables, footnotes, Mermaid, collapsible TOC, Save-as-PDF, and edit mode.",
   "minimum_chrome_version": "88",

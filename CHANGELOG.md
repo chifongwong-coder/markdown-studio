@@ -5,6 +5,16 @@ the `manifest.json` `version` field.
 
 ## 0.5.0
 
+### Renamed
+- **Extension renamed from "Markdown Viewer with Math" to "Markdown
+  Studio"** (short_name `MD Viewer` -> `MD Studio`). With viewer +
+  PDF export + edit mode all in the same package, "viewer" is no
+  longer accurate; "Studio" matches the broader feature surface and
+  differentiates from the crowded "Markdown Viewer / Reader / Preview"
+  entries on the Chrome Web Store. The extension's internal Chrome
+  ID is unchanged so existing users keep their installations and
+  receive the new name on the next listing refresh.
+
 ### Added
 - **Edit mode.** An `Edit` button in the TOC header swaps the
   rendered article for a full-viewport split view: a textarea with

@@ -1,4 +1,4 @@
-# Markdown Viewer with Math
+# Markdown Studio
 
 > Browse `.md` files in Chrome the way they're supposed to look — with proper
 > LaTeX math, syntax highlighting, and a collapsible table of contents.
