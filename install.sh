@@ -59,6 +59,14 @@ curl -sSL "${JSD}/marked-footnote@${MARKED_FOOTNOTE_VERSION}/dist/index.umd.js" 
 echo "==> mermaid@${MERMAID_VERSION}"
 curl -sSL "${JSD}/mermaid@${MERMAID_VERSION}/dist/mermaid.min.js" -o vendor/mermaid.min.js
 
+# Mermaid's bundle embeds U+FFFF and U+0001 as raw bytes inside string literals.
+# Chrome's content-script UTF-8 check rejects either with a misleading
+# "is not UTF-8 encoded" error, refusing to load the manifest. patch-mermaid.py
+# rewrites them as equivalent JS escapes — runtime behavior is identical, but
+# the on-disk file becomes ASCII at those positions. Idempotent.
+echo "==> patch mermaid for Chrome content-script loader"
+python3 vendor/patch-mermaid.py
+
 echo
 echo "Done. vendor/ size:"
 du -sh vendor/

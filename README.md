@@ -46,16 +46,19 @@ literal, and escaped `\$` must not trigger formula extraction.
 md-viewer/
 ├── manifest.json            Manifest V3 declaration
 ├── content.js               Entry point: grab raw markdown, render, replace
-├── lib/render.js            Core algorithm: math extraction + placeholder pipeline
+├── lib/render.js            Core algorithm: mermaid + math extraction, placeholder pipeline
 ├── lib/toc.js               Collapsible sidebar TOC
 ├── styles/viewer.css        Theme (light/dark auto)
 ├── vendor/                  Bundled dependencies (download via install.sh)
-│   ├── marked.min.js
+│   ├── marked.min.js + marked-footnote.min.js
 │   ├── katex.min.js + katex.min.css + fonts/
 │   ├── highlight.min.js + highlight-monokai.css
-│   └── purify.min.js
+│   ├── purify.min.js
+│   ├── mermaid.min.js
+│   └── patch-mermaid.py     Rewrites Chrome-rejected codepoints (U+FFFF/U+0001) post-download
 ├── icons/                   16/48/128 PNG icons
-└── install.sh               One-shot dependency fetcher
+├── install.sh               One-shot dependency fetcher (runs patch-mermaid.py)
+└── package.sh               Build the Chrome Web Store zip
 ```
 
 ## How math extraction works
@@ -98,8 +101,8 @@ sources, etc.) are excluded automatically.
   clobbering server-rendered content.
 - Inline code with unusual nested-backtick patterns relies on the CommonMark
   matching rules.
-- No support for Mermaid / PlantUML / footnote extensions — add a marked
-  plugin if you need them.
+- PlantUML is not supported. Mermaid and Pandoc-style footnotes are (see
+  Features above).
 
 ## Debugging
 

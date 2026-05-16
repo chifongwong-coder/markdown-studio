@@ -65,6 +65,13 @@ if bad:
     sys.exit(1)
 PY
 
+# --- ensure mermaid.min.js is free of Chrome-rejected codepoints ---
+# Defense in depth: if someone re-downloaded mermaid without re-running
+# install.sh, the bundle may still embed U+FFFF / U+0001 and Chrome will
+# refuse to load the extension. Re-run the (idempotent) patch before zipping
+# so we never ship a broken build.
+python3 vendor/patch-mermaid.py
+
 # --- vendor font count sanity ---
 fonts=$(find vendor/fonts -name '*.woff2' 2>/dev/null | wc -l | tr -d ' ')
 if [[ "$fonts" -lt 18 ]]; then
