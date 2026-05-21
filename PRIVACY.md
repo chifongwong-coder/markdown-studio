@@ -67,7 +67,7 @@ claims by reading the source directly.
 
 For questions about this policy or about the extension, you can:
 
-- open an issue at <https://github.com/chifongwong-coder/markdown-viewer-math/issues>
+- open an issue at <https://github.com/chifongwong-coder/markdown-studio/issues>
 - email **wongchifong0223@gmail.com**
 
 The developer responds to issues and email within a reasonable window.

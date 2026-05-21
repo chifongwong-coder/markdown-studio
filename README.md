@@ -27,7 +27,7 @@ literal, and escaped `\$` must not trigger formula extraction.
 
 ## Repository
 
-<https://github.com/chifongwong-coder/markdown-viewer-math>
+<https://github.com/chifongwong-coder/markdown-studio>
 
 ## Local development
 
@@ -45,7 +45,7 @@ literal, and escaped `\$` must not trigger formula extraction.
 ## Layout
 
 ```
-md-viewer/
+markdown-studio/
 ├── manifest.json            Manifest V3 declaration
 ├── content.js               Entry point: grab raw markdown, render, replace
 ├── lib/render.js            Core algorithm: mermaid + math extraction, placeholder pipeline
