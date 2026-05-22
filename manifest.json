@@ -30,9 +30,12 @@
         "vendor/highlight.min.js",
         "vendor/purify.min.js",
         "vendor/mermaid.min.js",
+        "vendor/jszip.min.js",
+        "vendor/mathml2omml.min.js",
         "lib/render.js",
         "lib/toc.js",
         "lib/editor.js",
+        "lib/exporter-docx.js",
         "content.js"
       ],
       "css": [

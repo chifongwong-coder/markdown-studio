@@ -286,6 +286,7 @@ article.markdown-studio-content {
 }
 .md-toc-toggle-all,
 .md-toc-print,
+.md-toc-word,
 .md-toc-edit {
   background: none;
   border: none;
@@ -298,6 +299,7 @@ article.markdown-studio-content {
 }
 .md-toc-toggle-all:hover,
 .md-toc-print:hover,
+.md-toc-word:hover,
 .md-toc-edit:hover {
   background: var(--md-block-bg);
   color: var(--md-text);
@@ -312,7 +314,8 @@ article.markdown-studio-content {
   align-items: center;
   gap: 0.2em;
 }
-.md-toc-print {
+.md-toc-print,
+.md-toc-word {
   font-size: 0.75em;
   font-weight: 600;
   letter-spacing: 0.04em;
@@ -527,6 +530,7 @@ body.markdown-studio-with-toc {
 .md-toc-handle:focus-visible,
 .md-toc-toggle-all:focus-visible,
 .md-toc-print:focus-visible,
+.md-toc-word:focus-visible,
 .md-toc-edit:focus-visible {
   outline: 2px solid var(--md-link);
   outline-offset: 2px;

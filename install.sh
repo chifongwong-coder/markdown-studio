@@ -14,6 +14,8 @@ HLJS_VERSION="11.10.0"
 DOMPURIFY_VERSION="3.2.4"
 MARKED_FOOTNOTE_VERSION="1.2.4"
 MERMAID_VERSION="10.9.3"
+JSZIP_VERSION="3.10.1"
+MATHML2OMML_VERSION="0.5.0"
 
 JSD="https://cdn.jsdelivr.net/npm"
 
@@ -66,6 +68,31 @@ curl -sSL "${JSD}/mermaid@${MERMAID_VERSION}/dist/mermaid.min.js" -o vendor/merm
 # the on-disk file becomes ASCII at those positions. Idempotent.
 echo "==> patch mermaid for Chrome content-script loader"
 python3 vendor/patch-mermaid.py
+
+# --- Word export deps ---
+# jszip ships a ready-made UMD build: pulled as-is.
+echo "==> jszip@${JSZIP_VERSION}"
+curl -sSL "${JSD}/jszip@${JSZIP_VERSION}/dist/jszip.min.js" -o vendor/jszip.min.js
+
+# mathml2omml ships only ESM/CJS, no UMD. Bundle it locally with esbuild
+# into a single IIFE that exposes `window.MathML2OMML.mml2omml`. Requires
+# Node + npx (every dev box for this project already has them).
+echo "==> mathml2omml@${MATHML2OMML_VERSION} (bundling ESM -> IIFE)"
+M2O_TMP=$(mktemp -d)
+trap 'rm -rf "$M2O_TMP"' EXIT
+(
+  cd "$M2O_TMP"
+  echo "{\"type\":\"module\",\"dependencies\":{\"mathml2omml\":\"${MATHML2OMML_VERSION}\"}}" > package.json
+  echo "import {mml2omml} from 'mathml2omml'; window.MathML2OMML = {mml2omml};" > entry.js
+  npm install --silent --no-audit --no-fund >/dev/null
+  npx --yes esbuild entry.js --bundle --format=iife --minify --target=es2020 --outfile=mathml2omml.min.js >/dev/null
+)
+mv "$M2O_TMP/mathml2omml.min.js" vendor/mathml2omml.min.js
+
+# mathml2omml is LGPL-3.0-or-later; ship the LGPL text next to the bundle so
+# the extension package is self-contained for license compliance.
+echo "==> LGPL-3.0 license text"
+curl -sSL "${JSD}/mathml2omml@${MATHML2OMML_VERSION}/LICENSE" -o vendor/LGPL-3.0.txt
 
 echo
 echo "Done. vendor/ size:"

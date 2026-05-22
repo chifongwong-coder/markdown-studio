@@ -1,5 +1,5 @@
-Markdown Viewer with Math bundles the following third-party libraries inside
-the vendor/ directory. Each retains its own copyright and license. Full
+Markdown Studio bundles the following third-party libraries inside the
+vendor/ directory. Each retains its own copyright and license. Full
 license texts follow the summary table.
 
   Library          Version    License           Upstream
@@ -13,6 +13,9 @@ license texts follow the summary table.
   DOMPurify        3.2.4      Apache-2.0 OR MPL-2.0
                                                 https://github.com/cure53/DOMPurify
   Mermaid          10.9.3     MIT               https://github.com/mermaid-js/mermaid
+  JSZip            3.10.1     MIT OR GPL-3.0-or-later
+                                                https://github.com/Stuk/jszip
+  mathml2omml      0.5.0      LGPL-3.0-or-later https://github.com/fiduswriter/mathml2omml
 
 ================================================================================
 1. marked — MIT
@@ -276,6 +279,41 @@ All bundled licenses are MIT, BSD, or ISC and are compatible with this
 extension's MIT distribution.
 
 ================================================================================
+7. JSZip — dual-licensed: MIT OR GPL-3.0-or-later
+================================================================================
 
-Markdown Viewer with Math itself (the code outside vendor/) is distributed
-under the MIT License — see ../LICENSE at the root of the package.
+Copyright (c) 2009-2016 Stuart Knightley, David Duponchel, Franz Buchinger,
+António Afonso
+
+JSZip is dual-licensed. Recipients may choose either of the two licenses.
+The full MIT and GPL-3.0 texts are bundled in the upstream repository
+(https://github.com/Stuk/jszip/blob/main/LICENSE.markdown). When JSZip is
+shipped as part of this extension, it is provided under the MIT License.
+
+The JSZip minified bundle in vendor/jszip.min.js is unmodified from the
+upstream npm release (jsdelivr CDN).
+
+================================================================================
+8. mathml2omml — LGPL-3.0-or-later
+================================================================================
+
+Copyright (c) Johannes Wilm and contributors.
+https://github.com/fiduswriter/mathml2omml
+
+This library is licensed under the GNU Lesser General Public License v3.0
+or (at your option) any later version. The full LGPL-3.0 text is available
+at https://www.gnu.org/licenses/lgpl-3.0.html and the GPL-3.0 text it
+references is at https://www.gnu.org/licenses/gpl-3.0.html. A copy of both
+ships next to this file as vendor/LGPL-3.0.txt for offline reference.
+
+The mathml2omml bundle in vendor/mathml2omml.min.js was produced by
+running esbuild over the upstream npm package at version 0.5.0 to convert
+its ESM build into an IIFE consumable by Chrome MV3 content scripts; no
+behavioural changes were made. Users wishing to substitute their own build
+of mathml2omml can replace vendor/mathml2omml.min.js with any module that
+assigns a function to window.MathML2OMML.mml2omml.
+
+================================================================================
+
+Markdown Studio itself (the code outside vendor/) is distributed under the
+MIT License — see ../LICENSE at the root of the package.
