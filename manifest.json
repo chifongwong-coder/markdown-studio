@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Markdown Studio",
   "short_name": "MD Studio",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "Render .md files with KaTeX math, code highlighting, tables, footnotes, Mermaid, collapsible TOC, Save-as-PDF, and edit mode.",
   "minimum_chrome_version": "88",
   "offline_enabled": true,

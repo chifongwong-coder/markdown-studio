@@ -3,6 +3,46 @@
 All notable changes to this extension are documented here. Versions follow
 the `manifest.json` `version` field.
 
+## 0.6.1
+
+### Added
+- **Edit mode: proportional scroll sync.** Scrolling either pane
+  (source textarea or preview) updates the other to the same
+  proportional position. Uses ratio rather than line-mapping --
+  math, tables, images, and mermaid SVGs change vertical size
+  between source and rendered HTML, so a 1:1 line map would need
+  a costly index for marginally better behaviour. A flag breaks
+  the would-be feedback loop where setting `scrollTop` on one
+  pane fires `scroll` on that pane and tries to sync back.
+
+### Fixed
+- **Edit mode no longer jumps to the bottom when opened.** Previous
+  builds called `textarea.focus()` after `textarea.value = source`,
+  so the browser snapped the textarea to the caret (which defaults
+  to end-of-text), making the editor open at the bottom of the
+  document. The mount path now captures the reader's scroll
+  position as a `[0,1]` ratio before swapping the article out,
+  uses `focus({ preventScroll: true })`, places the caret roughly
+  where the reader was, and explicitly restores the ratio on both
+  panes once the preview has rendered. Opening Edit now lands
+  on the same section the reader was looking at.
+
+### Changed (internal -- no user-visible impact beyond the build zip name)
+- Internal identifiers renamed from `md-viewer` / `MdViewer` to
+  `markdown-studio` / `MarkdownStudio`. Affects the `window`
+  global, CSS class prefixes used in `viewer.css` and JS,
+  console log prefix, and the two `localStorage` keys
+  (`...-toc-hidden`, `...-file-tip-dismissed-v1`).
+- `package.sh` now writes `build/markdown-studio-<version>.zip`
+  instead of `build/md-viewer-<version>.zip`.
+
+### Migration
+- A one-time idempotent migration in `content.js` moves any
+  existing `md-viewer-*` localStorage values to the new
+  `markdown-studio-*` keys so upgrading users keep their TOC
+  collapse state and don't see the file-access tip again. Safe to
+  delete in a future release once enough users have upgraded.
+
 ## 0.5.0
 
 ### Renamed
