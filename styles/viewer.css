@@ -1,4 +1,4 @@
-/* md-viewer theme. Light/dark follows prefers-color-scheme. */
+/* markdown-studio theme. Light/dark follows prefers-color-scheme. */
 
 :root {
   --md-bg: #ffffff;
@@ -26,7 +26,7 @@
   }
 }
 
-body.md-viewer-body {
+body.markdown-studio-body {
   margin: 0;
   padding: 0;
   background: var(--md-bg);
@@ -41,7 +41,7 @@ body.md-viewer-body {
   -webkit-font-smoothing: antialiased;
 }
 
-article.md-viewer-content {
+article.markdown-studio-content {
   max-width: 860px;
   margin: 0 auto;
   padding: 2.4em 1.6em 4em;
@@ -50,12 +50,12 @@ article.md-viewer-content {
 }
 
 /* Headings */
-.md-viewer-content h1,
-.md-viewer-content h2,
-.md-viewer-content h3,
-.md-viewer-content h4,
-.md-viewer-content h5,
-.md-viewer-content h6 {
+.markdown-studio-content h1,
+.markdown-studio-content h2,
+.markdown-studio-content h3,
+.markdown-studio-content h4,
+.markdown-studio-content h5,
+.markdown-studio-content h6 {
   color: var(--md-heading);
   font-family:
     "Noto Sans CJK SC", "Source Han Sans SC", "PingFang SC",
@@ -68,36 +68,36 @@ article.md-viewer-content {
    above the heading instead of pinning it flush against the viewport top.
    text-wrap: balance distributes long heading text across lines evenly
    (modern Chrome / Edge / Safari; older engines ignore it harmlessly). */
-.md-viewer-content h1,
-.md-viewer-content h2,
-.md-viewer-content h3,
-.md-viewer-content h4,
-.md-viewer-content h5,
-.md-viewer-content h6 {
+.markdown-studio-content h1,
+.markdown-studio-content h2,
+.markdown-studio-content h3,
+.markdown-studio-content h4,
+.markdown-studio-content h5,
+.markdown-studio-content h6 {
   scroll-margin-top: 1em;
   text-wrap: balance;
 }
 
-.md-viewer-content h1 {
+.markdown-studio-content h1 {
   font-size: 2em;
   border-bottom: 2.5px solid var(--md-link);
   padding-bottom: 0.25em;
   margin-top: 0.4em;
 }
-.md-viewer-content h2 {
+.markdown-studio-content h2 {
   font-size: 1.5em;
   border-bottom: 1px solid var(--md-border);
   padding-bottom: 0.2em;
 }
-.md-viewer-content h3 { font-size: 1.25em; }
-.md-viewer-content h4 { font-size: 1.1em; }
+.markdown-studio-content h3 { font-size: 1.25em; }
+.markdown-studio-content h4 { font-size: 1.1em; }
 
-.md-viewer-content p { margin: 0.8em 0; }
-.md-viewer-content a { color: var(--md-link); text-decoration: none; }
-.md-viewer-content a:hover { text-decoration: underline; }
+.markdown-studio-content p { margin: 0.8em 0; }
+.markdown-studio-content a { color: var(--md-link); text-decoration: none; }
+.markdown-studio-content a:hover { text-decoration: underline; }
 
 /* Inline code */
-.md-viewer-content :not(pre) > code {
+.markdown-studio-content :not(pre) > code {
   font-family:
     "JetBrains Mono", "Fira Code", "Source Code Pro", Menlo,
     Consolas, "Liberation Mono", monospace;
@@ -114,7 +114,7 @@ article.md-viewer-content {
 }
 
 /* Code blocks */
-.md-viewer-content pre {
+.markdown-studio-content pre {
   background: #272822;
   color: #f8f8f2;
   border-radius: 6px;
@@ -126,8 +126,8 @@ article.md-viewer-content {
   font-size: 0.92em;
   line-height: 1.55;
 }
-.md-viewer-content pre code,
-.md-viewer-content pre code.hljs {
+.markdown-studio-content pre code,
+.markdown-studio-content pre code.hljs {
   background: transparent !important;
   border: none !important;
   padding: 0 !important;
@@ -137,50 +137,50 @@ article.md-viewer-content {
 }
 
 /* Tables */
-.md-viewer-content .md-table-wrap {
+.markdown-studio-content .md-table-wrap {
   overflow-x: auto;
   overscroll-behavior-x: contain;
   margin: 1em 0;
 }
-.md-viewer-content .md-table-wrap > table { margin: 0; }
-.md-viewer-content table {
+.markdown-studio-content .md-table-wrap > table { margin: 0; }
+.markdown-studio-content table {
   width: 100%;
   border-collapse: collapse;
   margin: 1em 0;
   font-size: 0.95em;
 }
-.md-viewer-content th,
-.md-viewer-content td {
+.markdown-studio-content th,
+.markdown-studio-content td {
   padding: 0.55em 0.85em;
   border: 1px solid var(--md-border);
   text-align: left;
   overflow-wrap: break-word;
 }
-.md-viewer-content th {
+.markdown-studio-content th {
   background: var(--md-block-bg);
   font-weight: 600;
 }
-.md-viewer-content tr:nth-child(even) {
+.markdown-studio-content tr:nth-child(even) {
   background: var(--md-stripe);
 }
 
 /* Blockquotes */
-.md-viewer-content blockquote {
+.markdown-studio-content blockquote {
   border-left: 4px solid var(--md-link);
   margin: 1em 0;
   padding: 0.4em 1em;
   background: var(--md-block-bg);
   border-radius: 0 5px 5px 0;
 }
-.md-viewer-content blockquote p { margin: 0.3em 0; }
+.markdown-studio-content blockquote p { margin: 0.3em 0; }
 
 /* Lists */
-.md-viewer-content ul,
-.md-viewer-content ol { padding-left: 1.8em; margin: 0.7em 0; }
-.md-viewer-content li { margin: 0.25em 0; }
+.markdown-studio-content ul,
+.markdown-studio-content ol { padding-left: 1.8em; margin: 0.7em 0; }
+.markdown-studio-content li { margin: 0.25em 0; }
 
 /* Horizontal rule */
-.md-viewer-content hr {
+.markdown-studio-content hr {
   border: none;
   height: 1px;
   background: var(--md-border);
@@ -188,7 +188,7 @@ article.md-viewer-content {
 }
 
 /* Images */
-.md-viewer-content img {
+.markdown-studio-content img {
   max-width: 100%;
   height: auto;
   border-radius: 4px;
@@ -196,29 +196,29 @@ article.md-viewer-content {
 }
 
 /* Math */
-.md-viewer-content .math-display {
+.markdown-studio-content .math-display {
   display: block;
   text-align: center;
   margin: 1em 0;
   overflow-x: auto;
   overflow-y: hidden;
 }
-.md-viewer-content .math-inline { display: inline-block; }
-.md-viewer-content .katex { font-size: 1.05em; }
-.md-viewer-content .katex-display { margin: 1em 0 !important; }
+.markdown-studio-content .math-inline { display: inline-block; }
+.markdown-studio-content .katex { font-size: 1.05em; }
+.markdown-studio-content .katex-display { margin: 1em 0 !important; }
 
 /* Mermaid diagrams */
-.md-viewer-content .md-mermaid {
+.markdown-studio-content .md-mermaid {
   display: block;
   text-align: center;
   margin: 1.2em 0;
   overflow-x: auto;
 }
-.md-viewer-content .md-mermaid svg {
+.markdown-studio-content .md-mermaid svg {
   max-width: 100%;
   height: auto;
 }
-.md-viewer-content .md-mermaid-error {
+.markdown-studio-content .md-mermaid-error {
   display: block;
   background: var(--md-block-bg);
   border-left: 4px solid #e74c3c;
@@ -233,7 +233,7 @@ article.md-viewer-content {
 
 /* Dark-mode tweaks beyond highlight.js monokai */
 @media (prefers-color-scheme: dark) {
-  .md-viewer-content :not(pre) > code {
+  .markdown-studio-content :not(pre) > code {
     color: #fbbf24;
   }
 }
@@ -375,10 +375,10 @@ body.md-toc-hidden .md-toc-handle {
   opacity: 1;
   pointer-events: auto;
 }
-body.md-viewer-with-toc {
+body.markdown-studio-with-toc {
   transition: padding-left 0.22s ease;
 }
-body.md-viewer-with-toc.md-toc-hidden {
+body.markdown-studio-with-toc.md-toc-hidden {
   padding-left: 0;
 }
 
@@ -460,7 +460,7 @@ body.md-viewer-with-toc.md-toc-hidden {
 }
 
 /* Push the article rightwards when a TOC is mounted */
-body.md-viewer-with-toc {
+body.markdown-studio-with-toc {
   padding-left: 280px;
   box-sizing: border-box;
 }
@@ -469,22 +469,22 @@ body.md-viewer-with-toc {
    a fixed 280px column. The article gets the full viewport width; the
    drawer overlays the content (with a shadow) when the user toggles it on. */
 @media (min-width: 600px) and (max-width: 960px) {
-  body.md-viewer-with-toc { padding-left: 0; }
+  body.markdown-studio-with-toc { padding-left: 0; }
   .md-toc {
     box-shadow: 2px 0 14px rgba(0, 0, 0, 0.18);
     transform: translateX(-100%);
   }
-  body.md-viewer-with-toc:not(.md-toc-hidden) .md-toc {
+  body.markdown-studio-with-toc:not(.md-toc-hidden) .md-toc {
     transform: translateX(0);
   }
   /* Both handles vertically centered on the same edge; the visible one is
      determined by md-toc-hidden state via opacity. */
-  body.md-viewer-with-toc:not(.md-toc-hidden) .md-toc-hide {
+  body.markdown-studio-with-toc:not(.md-toc-hidden) .md-toc-hide {
     transform: translate(280px, -50%);
     opacity: 1;
     pointer-events: auto;
   }
-  body.md-viewer-with-toc:not(.md-toc-hidden) .md-toc-handle {
+  body.markdown-studio-with-toc:not(.md-toc-hidden) .md-toc-handle {
     opacity: 0;
     pointer-events: none;
   }
@@ -503,7 +503,7 @@ body.md-viewer-with-toc {
   .md-toc,
   .md-toc-hide,
   .md-toc-handle { display: none; }
-  body.md-viewer-with-toc { padding-left: 0; }
+  body.markdown-studio-with-toc { padding-left: 0; }
 }
 
 /* TOC scrollbar styling (Webkit) */
@@ -520,7 +520,7 @@ body.md-viewer-with-toc {
    Accessibility: keyboard focus + reduced motion
    ============================================================ */
 
-.md-viewer-content a:focus-visible,
+.markdown-studio-content a:focus-visible,
 .md-toc-link:focus-visible,
 .md-toc-caret:focus-visible,
 .md-toc-hide:focus-visible,
@@ -559,8 +559,8 @@ body.md-editing .md-toc-handle,
 body.md-editing .md-file-tip {
   display: none !important;
 }
-body.md-editing.md-viewer-with-toc,
-body.md-editing.md-viewer-body {
+body.md-editing.markdown-studio-with-toc,
+body.md-editing.markdown-studio-body {
   padding-left: 0 !important;
 }
 
@@ -673,7 +673,7 @@ body.md-editing.md-viewer-body {
 /* Article injected by the preview renderer inherits the screen styles
  * (max-width 860 + horizontal margin) but inside the preview pane we
  * want it to fill the pane, scroll the pane itself. */
-.md-editor-preview .md-viewer-content {
+.md-editor-preview .markdown-studio-content {
   max-width: none;
   margin: 0;
   padding: 1.5em 1.6em 3em;
@@ -796,30 +796,30 @@ body.md-editing.md-viewer-body {
   .md-toc-hide,
   .md-toc-handle,
   .md-file-tip { display: none !important; }
-  .md-viewer-content {
+  .markdown-studio-content {
     max-width: none;
     padding: 0;
   }
   /* On paper, scrollable code blocks can't scroll. Wrap long lines so
    * nothing is silently cut off at the page edge. */
-  .md-viewer-content pre {
+  .markdown-studio-content pre {
     white-space: pre-wrap;
     word-break: break-word;
   }
-  .md-viewer-content h1,
-  .md-viewer-content h2,
-  .md-viewer-content h3 { break-after: avoid; }
-  .md-viewer-content pre,
-  .md-viewer-content table,
-  .md-viewer-content .math-display { break-inside: avoid; }
+  .markdown-studio-content h1,
+  .markdown-studio-content h2,
+  .markdown-studio-content h3 { break-after: avoid; }
+  .markdown-studio-content pre,
+  .markdown-studio-content table,
+  .markdown-studio-content .math-display { break-inside: avoid; }
   /* Cap mermaid SVG height in print so a tall flowchart doesn't eat a
    * full page on its own. */
-  .md-viewer-content .md-mermaid svg {
+  .markdown-studio-content .md-mermaid svg {
     max-height: 4in;
   }
   /* Try to keep the footnotes section from splitting awkwardly across
    * page breaks. */
-  .md-viewer-content [data-footnotes] {
+  .markdown-studio-content [data-footnotes] {
     break-inside: avoid-page;
   }
 
@@ -845,14 +845,14 @@ body.md-editing.md-viewer-body {
     --md-stripe: #f8fafc;
     --md-muted: #6b7280;
   }
-  .md-viewer-with-toc,
-  .md-viewer-body {
+  .markdown-studio-with-toc,
+  .markdown-studio-body {
     padding-left: 0 !important;
     background: #ffffff !important;
     color: #000000 !important;
   }
-  .md-viewer-content pre,
-  .md-viewer-content :not(pre) > code {
+  .markdown-studio-content pre,
+  .markdown-studio-content :not(pre) > code {
     background: #f4f4f4 !important;
     color: #000 !important;
     border: 1px solid #cbd5e1 !important;
@@ -863,102 +863,102 @@ body.md-editing.md-viewer-body {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
-  .md-viewer-content a {
+  .markdown-studio-content a {
     color: #000;
     text-decoration: underline;
   }
   /* Highlight.js Monokai is designed for dark backgrounds; recolour
    * the spans in GitHub-Light hues so printed code stays readable on
    * a white page. */
-  .md-viewer-content .hljs,
-  .md-viewer-content .hljs * {
+  .markdown-studio-content .hljs,
+  .markdown-studio-content .hljs * {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
-  .md-viewer-content .hljs { color: #24292e !important; }
-  .md-viewer-content .hljs-comment,
-  .md-viewer-content .hljs-quote {
+  .markdown-studio-content .hljs { color: #24292e !important; }
+  .markdown-studio-content .hljs-comment,
+  .markdown-studio-content .hljs-quote {
     color: #6a737d !important;
     font-style: italic;
   }
-  .md-viewer-content .hljs-keyword,
-  .md-viewer-content .hljs-selector-tag,
-  .md-viewer-content .hljs-doctag,
-  .md-viewer-content .hljs-section,
-  .md-viewer-content .hljs-name {
+  .markdown-studio-content .hljs-keyword,
+  .markdown-studio-content .hljs-selector-tag,
+  .markdown-studio-content .hljs-doctag,
+  .markdown-studio-content .hljs-section,
+  .markdown-studio-content .hljs-name {
     color: #d73a49 !important;
   }
-  .md-viewer-content .hljs-string,
-  .md-viewer-content .hljs-bullet,
-  .md-viewer-content .hljs-symbol,
-  .md-viewer-content .hljs-regexp {
+  .markdown-studio-content .hljs-string,
+  .markdown-studio-content .hljs-bullet,
+  .markdown-studio-content .hljs-symbol,
+  .markdown-studio-content .hljs-regexp {
     color: #032f62 !important;
   }
-  .md-viewer-content .hljs-number,
-  .md-viewer-content .hljs-literal,
-  .md-viewer-content .hljs-variable,
-  .md-viewer-content .hljs-template-variable,
-  .md-viewer-content .hljs-attr,
-  .md-viewer-content .hljs-attribute,
-  .md-viewer-content .hljs-tag,
-  .md-viewer-content .hljs-type {
+  .markdown-studio-content .hljs-number,
+  .markdown-studio-content .hljs-literal,
+  .markdown-studio-content .hljs-variable,
+  .markdown-studio-content .hljs-template-variable,
+  .markdown-studio-content .hljs-attr,
+  .markdown-studio-content .hljs-attribute,
+  .markdown-studio-content .hljs-tag,
+  .markdown-studio-content .hljs-type {
     color: #005cc5 !important;
   }
-  .md-viewer-content .hljs-title,
-  .md-viewer-content .hljs-built_in,
-  .md-viewer-content .hljs-class,
-  .md-viewer-content .hljs-class .hljs-title {
+  .markdown-studio-content .hljs-title,
+  .markdown-studio-content .hljs-built_in,
+  .markdown-studio-content .hljs-class,
+  .markdown-studio-content .hljs-class .hljs-title {
     color: #6f42c1 !important;
   }
-  .md-viewer-content .hljs-params,
-  .md-viewer-content .hljs-meta,
-  .md-viewer-content .hljs-punctuation {
+  .markdown-studio-content .hljs-params,
+  .markdown-studio-content .hljs-meta,
+  .markdown-studio-content .hljs-punctuation {
     color: #24292e !important;
   }
-  .md-viewer-content .hljs-deletion {
+  .markdown-studio-content .hljs-deletion {
     color: #b31d28 !important;
     background-color: #ffeef0 !important;
   }
-  .md-viewer-content .hljs-addition {
+  .markdown-studio-content .hljs-addition {
     color: #22863a !important;
     background-color: #e6ffed !important;
   }
-  .md-viewer-content .hljs-emphasis { font-style: italic; }
-  .md-viewer-content .hljs-strong { font-weight: 600; }
+  .markdown-studio-content .hljs-emphasis { font-style: italic; }
+  .markdown-studio-content .hljs-strong { font-weight: 600; }
   /* Mermaid forced light. If the page was screen-rendered in dark
    * mode the SVG's inline dark fills survive print otherwise. */
-  .md-viewer-content .md-mermaid svg .node rect,
-  .md-viewer-content .md-mermaid svg .node circle,
-  .md-viewer-content .md-mermaid svg .node ellipse,
-  .md-viewer-content .md-mermaid svg .node polygon,
-  .md-viewer-content .md-mermaid svg .node path,
-  .md-viewer-content .md-mermaid svg .cluster rect {
+  .markdown-studio-content .md-mermaid svg .node rect,
+  .markdown-studio-content .md-mermaid svg .node circle,
+  .markdown-studio-content .md-mermaid svg .node ellipse,
+  .markdown-studio-content .md-mermaid svg .node polygon,
+  .markdown-studio-content .md-mermaid svg .node path,
+  .markdown-studio-content .md-mermaid svg .cluster rect {
     fill: #ffffff !important;
     stroke: #333333 !important;
   }
-  .md-viewer-content .md-mermaid svg .nodeLabel,
-  .md-viewer-content .md-mermaid svg .nodeLabel *,
-  .md-viewer-content .md-mermaid svg .edgeLabel,
-  .md-viewer-content .md-mermaid svg .edgeLabel *,
-  .md-viewer-content .md-mermaid svg text,
-  .md-viewer-content .md-mermaid svg foreignObject div,
-  .md-viewer-content .md-mermaid svg foreignObject span {
+  .markdown-studio-content .md-mermaid svg .nodeLabel,
+  .markdown-studio-content .md-mermaid svg .nodeLabel *,
+  .markdown-studio-content .md-mermaid svg .edgeLabel,
+  .markdown-studio-content .md-mermaid svg .edgeLabel *,
+  .markdown-studio-content .md-mermaid svg text,
+  .markdown-studio-content .md-mermaid svg foreignObject div,
+  .markdown-studio-content .md-mermaid svg foreignObject span {
     color: #000000 !important;
     fill: #000000 !important;
     background: transparent !important;
   }
-  .md-viewer-content .md-mermaid svg .edgePath path,
-  .md-viewer-content .md-mermaid svg .flowchart-link {
+  .markdown-studio-content .md-mermaid svg .edgePath path,
+  .markdown-studio-content .md-mermaid svg .flowchart-link {
     stroke: #555555 !important;
     fill: none !important;
   }
-  .md-viewer-content .md-mermaid svg .arrowheadPath,
-  .md-viewer-content .md-mermaid svg marker path {
+  .markdown-studio-content .md-mermaid svg .arrowheadPath,
+  .markdown-studio-content .md-mermaid svg marker path {
     fill: #555555 !important;
     stroke: #555555 !important;
   }
-  .md-viewer-content .md-mermaid svg,
-  .md-viewer-content .md-mermaid svg * {
+  .markdown-studio-content .md-mermaid svg,
+  .markdown-studio-content .md-mermaid svg * {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }

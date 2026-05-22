@@ -13,7 +13,7 @@ from your `.md` files leaves your machine.
 | Data | What | Where it lives |
 |------|------|----------------|
 | The text of the `.md` file you opened | Parsed and rendered into HTML | In-memory only, inside the browser tab. Discarded when the tab closes. |
-| TOC collapse/expand preference | A single boolean (`md-viewer-toc-hidden`) | `localStorage` of the current origin. Never transmitted. |
+| TOC collapse/expand preference | A single boolean (`markdown-studio-toc-hidden`) | `localStorage` of the current origin. Never transmitted. |
 
 That is everything. There is no other data the extension reads, writes, or
 sends.

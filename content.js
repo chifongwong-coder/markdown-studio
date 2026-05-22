@@ -11,6 +11,28 @@
 (function () {
   'use strict';
 
+  // One-time migration: pre-rename builds stored prefs under the
+  // `md-viewer-*` prefix. Move any surviving values to the new
+  // `markdown-studio-*` keys so existing users keep their TOC collapse
+  // state and don't see the file-access tip again after the rename.
+  // Idempotent: once the old key is gone, the loop is a no-op. Safe to
+  // delete this block in a future release after enough time has passed.
+  try {
+    if (window.localStorage) {
+      ['toc-hidden', 'file-tip-dismissed-v1'].forEach(function (suffix) {
+        const oldKey = 'md-viewer-' + suffix;
+        const newKey = 'markdown-studio-' + suffix;
+        const v = window.localStorage.getItem(oldKey);
+        if (v !== null) {
+          if (window.localStorage.getItem(newKey) === null) {
+            window.localStorage.setItem(newKey, v);
+          }
+          window.localStorage.removeItem(oldKey);
+        }
+      });
+    }
+  } catch (e) { /* localStorage blocked => nothing to migrate */ }
+
   /** Decide whether this page is Chrome's default text/plain markdown view.
    *  We only take over if the URL really looks like a Markdown file or the
    *  Content-Type is text/markdown / text/plain — otherwise some other
@@ -99,7 +121,7 @@
    *  definition enabled and there's nothing to remind them about.
    *  Dismissal persists in localStorage so a tip appears at most once
    *  per user-per-origin. Hidden in print via @media print rule. */
-  const FILE_TIP_KEY = 'md-viewer-file-tip-dismissed-v1';
+  const FILE_TIP_KEY = 'markdown-studio-file-tip-dismissed-v1';
   function maybeMountFileAccessTip(host) {
     try {
       const proto = window.location.protocol;
@@ -145,7 +167,7 @@
   }
 
   function renderInto(md) {
-    const result = window.MdViewer.renderMarkdown(md);
+    const result = window.MarkdownStudio.renderMarkdown(md);
     // renderMarkdown switched in v0.3 to returning {html, mermaidSources}.
     // Earlier versions returned a bare string; keep a shim for safety.
     const html = typeof result === 'string' ? result : result.html;
@@ -153,7 +175,7 @@
 
     // Wrap in <article> so CSS can target our root easily.
     const article = document.createElement('article');
-    article.className = 'md-viewer-content';
+    article.className = 'markdown-studio-content';
     article.innerHTML = html;
 
     // Insert <base href="..."> so relative image / link paths in the
@@ -163,12 +185,12 @@
 
     document.body.innerHTML = '';
     document.body.appendChild(article);
-    document.body.classList.add('md-viewer-body');
+    document.body.classList.add('markdown-studio-body');
     maybeMountFileAccessTip(document.body);
     setFavicon();
 
     // Syntax highlighting.
-    window.MdViewer.highlightCode(article);
+    window.MarkdownStudio.highlightCode(article);
 
     // Wrap each table in a scrollable container so wide tables on narrow
     // viewports scroll horizontally inside the table area instead of pushing
@@ -189,9 +211,9 @@
     }
 
     // Mount the sidebar TOC (auto-skips when fewer than 2 headings).
-    if (window.MdViewer.mountTOC) {
-      try { window.MdViewer.mountTOC(article); }
-      catch (e) { console.warn('[md-viewer] TOC mount failed:', e); }
+    if (window.MarkdownStudio.mountTOC) {
+      try { window.MarkdownStudio.mountTOC(article); }
+      catch (e) { console.warn('[markdown-studio] TOC mount failed:', e); }
     }
 
     // Render any mermaid diagrams asynchronously. Stash sources +
@@ -201,7 +223,7 @@
       _mermaidSources = mermaidSources;
       _mermaidArticle = article;
       renderMermaidDiagrams(article, mermaidSources, screenMermaidTheme())
-        .catch((e) => console.warn('[md-viewer] mermaid render failed:', e));
+        .catch((e) => console.warn('[markdown-studio] mermaid render failed:', e));
     }
   }
 
@@ -216,10 +238,10 @@
   //     current screen theme.
   let _cachedRawMarkdown = '';
   function exposeMermaidRerender() {
-    if (window.MdViewer) {
-      window.MdViewer.rerenderMermaidForTheme = rerenderMermaidForTheme;
-      window.MdViewer.getRawMarkdown = () => _cachedRawMarkdown;
-      window.MdViewer.renderMermaidInto = (article, sources) =>
+    if (window.MarkdownStudio) {
+      window.MarkdownStudio.rerenderMermaidForTheme = rerenderMermaidForTheme;
+      window.MarkdownStudio.getRawMarkdown = () => _cachedRawMarkdown;
+      window.MarkdownStudio.renderMermaidInto = (article, sources) =>
         renderMermaidDiagrams(article, sources, screenMermaidTheme());
     }
   }
@@ -329,9 +351,9 @@
 
   async function main() {
     // Idempotency: if we (or a bfcache restore) have already rendered this
-    // page, skip. document.body carries the .md-viewer-body marker class
+    // page, skip. document.body carries the .markdown-studio-body marker class
     // exactly when render succeeded.
-    if (document.body && document.body.classList.contains('md-viewer-body')) {
+    if (document.body && document.body.classList.contains('markdown-studio-body')) {
       return;
     }
     const md = getRawMarkdown();
@@ -351,7 +373,7 @@
       // after the article + sources are populated.
       exposeMermaidRerender();
     } catch (e) {
-      console.error('[md-viewer] render failed:', e);
+      console.error('[markdown-studio] render failed:', e);
     }
   }
 

@@ -109,7 +109,7 @@ sources, etc.) are excluded automatically.
 ## Debugging
 
 Open any `.md` file, hit F12, look at the console. Errors from the extension
-are prefixed with `[md-viewer]`.
+are prefixed with `[markdown-studio]`.
 
 If rendering misbehaves, check:
 
