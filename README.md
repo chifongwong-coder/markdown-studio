@@ -91,7 +91,7 @@ See `lib/render.js` for the implementation.
 
 Run `./package.sh`. It reads the version from `manifest.json`, validates
 that every runtime file is present, and writes
-`build/md-viewer-<version>.zip` containing only what Chrome needs at
+`build/markdown-studio-<version>.zip` containing only what Chrome needs at
 runtime plus `LICENSE` and `vendor/LICENSES.txt`. Development assets
 (this README, test fixtures, screenshots, install scripts, icon
 sources, etc.) are excluded automatically.

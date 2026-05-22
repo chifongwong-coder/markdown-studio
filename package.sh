@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # package.sh — build the Chrome Web Store upload zip.
 #
-# Outputs build/md-viewer-<version>.zip. The version is read from
+# Outputs build/markdown-studio-<version>.zip. The version is read from
 # manifest.json so bumping manifest.json's "version" is the only change
 # needed between releases.
 #
@@ -81,7 +81,7 @@ fi
 
 # --- prepare output dir ---
 mkdir -p build
-OUT="build/md-viewer-${VERSION}.zip"
+OUT="build/markdown-studio-${VERSION}.zip"
 rm -f "$OUT"
 
 # --- build the zip via an explicit allowlist (not exclude list) so a future
