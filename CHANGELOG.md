@@ -10,10 +10,22 @@ the `manifest.json` `version` field.
   to PDF / Edit. The rendered article downloads as a Word document
   with **editable equations** -- math is converted from KaTeX's
   MathML through mathml2omml to OMML and embedded as native Word
-  equation primitives (not images), so users can click a formula
-  in Word and edit it in the equation editor. Mermaid SVG, tables,
-  images, footnotes, and real hyperlinks are not yet supported;
-  placeholders ship for those.
+  equation primitives, so users can click a formula in Word and edit
+  it in the equation editor.
+  Feature coverage:
+  - Headings h1-h6, paragraphs, bold/italic, line breaks
+  - Inline code AND fenced code blocks with **syntax-highlighted
+    colours** (highlight.js -> GitHub-Light palette) preserved
+  - Tables (with header bold + light shading, borders, mixed inline
+    content including math inside cells)
+  - Images: png/jpeg/gif fetched and embedded; SVG/webp fall back
+    to italic alt text
+  - Mermaid diagrams rasterised SVG -> PNG at 2x and embedded
+  - **Real Word numbered / bulleted lists** via numbering.xml --
+    each <ol> restarts counting at 1; nested lists indent
+  - **Real Word hyperlinks** via external rels (clickable in Word)
+  - **Native Word footnotes** via footnotes.xml -- citation
+    superscripts navigate to the bottom-of-page footnote and back
 
 ### Math conversion pipeline (lib/exporter-docx.js)
 The path from KaTeX-rendered math to Word-editable equation is built
@@ -60,13 +72,16 @@ out of these post-processors, in order:
   MathML the exporter reads is present in the DOM. CSS-clipped, no
   visible change.
 
-### Deferred to later 0.7.x
-- Tables (currently placeholder text)
-- Images (currently placeholder text)
-- Mermaid SVG → PNG → ImageRun
-- Real <w:hyperlink> (link text inlined, URL dropped)
-- Word native <w:footnote> wiring
-- Real `<w:numbering>` lists (currently fake bullets / numeric prefix)
+### Known limitations
+- Same-page anchor links (`[See section][#foo]` -> `<a href="#foo">`)
+  are rendered as plain text -- Word would need explicit bookmarks
+  on every heading slug to follow them, and we don't materialise
+  those yet.
+- SVG images that aren't mermaid (e.g. a `.svg` `<img>` in the
+  source) skip to italic alt text.
+- TOC sidebar / file-tip / TOC toggle controls are excluded from
+  the export by class-name filter so the docx contains only
+  document content.
 
 ## 0.6.1
 
