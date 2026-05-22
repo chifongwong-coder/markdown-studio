@@ -3,6 +3,71 @@
 All notable changes to this extension are documented here. Versions follow
 the `manifest.json` `version` field.
 
+## 0.7.0 (in progress on `feat/word-export`)
+
+### Added
+- **Save as Word (.docx).** New "Word" button in the TOC header next
+  to PDF / Edit. The rendered article downloads as a Word document
+  with **editable equations** -- math is converted from KaTeX's
+  MathML through mathml2omml to OMML and embedded as native Word
+  equation primitives (not images), so users can click a formula
+  in Word and edit it in the equation editor. Mermaid SVG, tables,
+  images, footnotes, and real hyperlinks are not yet supported;
+  placeholders ship for those.
+
+### Math conversion pipeline (lib/exporter-docx.js)
+The path from KaTeX-rendered math to Word-editable equation is built
+out of these post-processors, in order:
+- `stripUnsupportedMathMLElements` -- drop <annotation>, unwrap
+  <mpadded>, drop <mphantom>. Pre-cleaning silences ~60 spurious
+  `Type not supported` warnings per math-heavy article that mml2omml
+  would otherwise spam to the console.
+- `normalizeMathVariants` -- replace `<mi mathvariant="script">N</mi>`
+  with the Unicode math script letter (`𝒩`). mml2omml emits an
+  invalid `<m:sty m:val="undefined"/>` for script/double-struck/
+  fraktur/sans-serif variants; Word falls back to body-text font
+  on the bad value. Using the pre-styled codepoint sidesteps the
+  bug entirely.
+- `preserveMtextBoundarySpace` -- smuggle <mtext> trailing whitespace
+  through mml2omml's whitespace-stripping XML parser via a PUA
+  sentinel so `\text{if } x < 0` doesn't render as `ifx<0`.
+- `mml2omml` -- the actual MathML→OMML conversion (vendor lib).
+- `escapeMTextInOMML` -- mml2omml leaves raw '<' and '&' in <m:t>
+  content. Word's XML parser then truncates the math at the bad
+  byte; any inequality with `<` would silently disappear.
+- `fixEmptyNary` -- right-to-left fill of empty <m:e/> in n-ary
+  operators (integrals, sums). KaTeX puts the integrand as a sibling
+  of the operator, not a child, leaving the OMML integrand slot
+  empty. The right-to-left walk handles nested cases (∑∫f dx) in a
+  single pass.
+- `restoreSentinelSpaces` -- PUA → space.
+- `stripInvisibleMathOperators` -- drop U+2061-U+2064 (function
+  application, invisible times, invisible separator, invisible plus).
+  Pages renders them invisibly per the Unicode spec; Word's Cambria
+  Math has no glyph for U+2063 and substitutes a comma-shaped fallback,
+  surfacing as a "phantom comma" next to `\\mathcal{N}\\!\\left(...`.
+- `stripOmmlNamespaceDecl` -- drop per-element xmlns:m / xmlns:w
+  declarations (the document.xml root declares them).
+
+### Build
+- Two new vendor libraries:
+  - `vendor/jszip.min.js`         (MIT/GPL dual, UMD from jsdelivr)
+  - `vendor/mathml2omml.min.js`   (LGPL-3.0, ESM upstream, bundled
+                                   to IIFE locally via esbuild;
+                                   install.sh runs the bundle step)
+- `vendor/LGPL-3.0.txt` ships next to LICENSES.txt for compliance.
+- `lib/render.js`: KaTeX output mode 'html' → 'htmlAndMathml' so the
+  MathML the exporter reads is present in the DOM. CSS-clipped, no
+  visible change.
+
+### Deferred to later 0.7.x
+- Tables (currently placeholder text)
+- Images (currently placeholder text)
+- Mermaid SVG → PNG → ImageRun
+- Real <w:hyperlink> (link text inlined, URL dropped)
+- Word native <w:footnote> wiring
+- Real `<w:numbering>` lists (currently fake bullets / numeric prefix)
+
 ## 0.6.1
 
 ### Added
