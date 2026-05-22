@@ -26,6 +26,14 @@ the `manifest.json` `version` field.
   where the reader was, and explicitly restores the ratio on both
   panes once the preview has rendered. Opening Edit now lands
   on the same section the reader was looking at.
+- **Exiting Edit lands the reader where the editor was scrolled to,
+  not where they originally started.** Previously unmountEditor
+  restored the pre-edit scrollY captured at mount time. If the user
+  scrolled around in source mode, hitting Cancel would teleport
+  them back. The exit path now reads the textarea's scroll ratio
+  before the editor is detached and applies it to the reader's
+  scrollable range, so Mount and Cancel form a symmetric pair --
+  both preserve "where you were looking" across the swap.
 
 ### Changed (internal -- no user-visible impact beyond the build zip name)
 - Internal identifiers renamed from `md-viewer` / `MdViewer` to
