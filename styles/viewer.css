@@ -817,7 +817,16 @@ body.md-editing.markdown-studio-body {
   }
   .markdown-studio-content h1,
   .markdown-studio-content h2,
-  .markdown-studio-content h3 { break-after: avoid; }
+  .markdown-studio-content h3,
+  .markdown-studio-content h4,
+  .markdown-studio-content h5,
+  .markdown-studio-content h6 {
+    /* text-wrap:balance triggers a Chrome print-layout bug (text
+       collapses to 0-height) in multiple Chrome builds. Reset to
+       the default wrapping mode so headings stay visible in PDF. */
+    text-wrap: auto;
+    break-after: avoid;
+  }
   .markdown-studio-content pre,
   .markdown-studio-content table,
   .markdown-studio-content .math-display { break-inside: avoid; }
