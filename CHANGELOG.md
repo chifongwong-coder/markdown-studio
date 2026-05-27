@@ -15,10 +15,10 @@ the `manifest.json` `version` field.
   so h4–h6 no longer orphan at page bottom.
 
 ### Changed
-- **Editor Download opens a native "Save As" dialog.** Uses the File
-  System Access API (`showSaveFilePicker`) so users can choose save
-  path and filename — and overwrite the original file directly without
-  manually moving the download. Falls back to the previous Blob
+- **Editor Download and Word export open a native "Save As" dialog.**
+  Both use the File System Access API (`showSaveFilePicker`) so users
+  can choose save path and filename — and overwrite files directly
+  without manually moving downloads. Falls back to the previous Blob
   download on browsers that don't support the API.
 
 ## 0.7.0
