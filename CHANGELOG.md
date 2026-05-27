@@ -3,7 +3,25 @@
 All notable changes to this extension are documented here. Versions follow
 the `manifest.json` `version` field.
 
-## 0.7.0 (in progress on `feat/word-export`)
+## 0.7.1
+
+### Fixed
+- **PDF export: heading text invisible.** `text-wrap: balance` on h1–h6
+  triggers a Chrome print-layout bug where heading elements collapse to
+  0-height, making all heading text disappear from exported PDFs while
+  borders remain visible. Reset `text-wrap` to `auto` inside
+  `@media print`; screen rendering still uses `balance`.
+- Extend `break-after: avoid` from h1–h3 to all heading levels in print
+  so h4–h6 no longer orphan at page bottom.
+
+### Changed
+- **Editor Download opens a native "Save As" dialog.** Uses the File
+  System Access API (`showSaveFilePicker`) so users can choose save
+  path and filename — and overwrite the original file directly without
+  manually moving the download. Falls back to the previous Blob
+  download on browsers that don't support the API.
+
+## 0.7.0
 
 ### Added
 - **Save as Word (.docx).** New "Word" button in the TOC header next
