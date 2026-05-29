@@ -231,6 +231,14 @@
       _mermaidSources = mermaidSources;
       _mermaidArticle = article;
       renderMermaidDiagrams(article, mermaidSources, screenMermaidTheme())
+        .then(() => {
+          // Mermaid injects SVG label text only now, after comments were
+          // first anchored against the (then-empty) diagram placeholders.
+          // Re-anchor so highlights for passages after a diagram land
+          // correctly instead of on stale, pre-diagram offsets.
+          const refresh = window.MarkdownStudio && window.MarkdownStudio.refreshCommentHighlights;
+          if (refresh) { try { refresh(); } catch (e) { /* ignore */ } }
+        })
         .catch((e) => console.warn('[markdown-studio] mermaid render failed:', e));
     }
   }

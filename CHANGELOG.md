@@ -3,6 +3,62 @@
 All notable changes to this extension are documented here. Versions follow
 the `manifest.json` `version` field.
 
+## 0.8.1
+
+Hardening pass on 0.8.0's comments feature.
+
+### Fixed
+- **Mermaid offset corruption.** Comments were anchored before the async
+  Mermaid render injected its SVG label text, so saved comments positioned
+  after a diagram landed on stale rendered-text offsets. `content.js` now
+  re-anchors highlights (`refreshCommentHighlights`) once Mermaid finishes.
+- **Wrong-passage re-anchoring.** The re-locate fallback could silently
+  attach a comment to a *different* occurrence of a short/common quote after
+  the document changed. The bare-quote search now only runs for a long
+  (≥12 char) or document-unique quote; otherwise the comment is marked
+  orphaned instead of guessing.
+- **Edit-on-click after drift.** Clicking a highlight now hit-tests against
+  the resolved range's live offsets, not the (possibly stale) persisted ones.
+- **Sidecar injection.** Quote / context / section / comment-body fields are
+  now neutralised when composing `.comments.md` so page-derived text can't
+  forge markdown structure (headings, list items, fences) in the export.
+- **localStorage record validation.** Loaded records are shape-checked and
+  malformed/hostile entries dropped before they reach the offset math.
+- **Comment isolation on web pages.** Because `localStorage` is origin-scoped
+  (not path-scoped or private), persistence is now split by protocol:
+  `file://` documents persist as before, but on `http(s)` pages comments are
+  kept in memory only — nothing is written to or read from page storage, so
+  no same-origin script can read or forge them. Trade-off: web-page comments
+  are session-only and clear on refresh (the panel notes this).
+- **Multi-range selections** (e.g. across table cells) now capture the whole
+  span instead of only the first fragment.
+- **Storage key** drops the query string as well as the fragment, so a
+  cache-busted URL (`?v=2`) no longer fragments a file's comments.
+
+### Changed
+- **Dashed underline requires Chrome 124+** to paint (the `::highlight()`
+  `text-decoration` support landed there). `minimum_chrome_version` stays at
+  88 by choice: on older Chrome the underline just doesn't show, while
+  create / list / edit / download / persistence all still work.
+- **Comment dash colour is now teal** on light backgrounds (was blue), to
+  avoid confusion with link underlines.
+- **Touch support.** The add flow now also responds to `touchend` /
+  `selectionchange`, and the panel has a "Comment on selection" button as a
+  non-floating entry point.
+- **Accessibility.** The popover and panel are `role="dialog"` with a focus
+  trap, document-level Escape, focus restored to the opener on close, and
+  `aria-expanded` on the launcher.
+
+### Performance
+- Re-anchoring builds the article text + a binary-searchable text-node index
+  **once** per pass instead of rebuilding `textContent` and re-walking the
+  tree per comment.
+- The panel updates incrementally (per-item) instead of tearing down and
+  rebuilding the whole list on every change.
+- Cheap early-outs: click hit-testing skips when there are no comments; the
+  add button avoids layout work on collapsed selections; `nearestHeading`
+  stops at the first heading past the selection.
+
 ## 0.8.0
 
 ### Added
