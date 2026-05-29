@@ -27,6 +27,8 @@ REQUIRED=(
   lib/render.js
   lib/toc.js
   lib/editor.js
+  lib/exporter-docx.js
+  lib/comments.js
   styles/viewer.css
   vendor/marked.min.js
   vendor/marked-footnote.min.js
