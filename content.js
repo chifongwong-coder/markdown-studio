@@ -216,6 +216,14 @@
       catch (e) { console.warn('[markdown-studio] TOC mount failed:', e); }
     }
 
+    // Wire up the comments layer: text-selection -> comment, dashed-underline
+    // highlights, and the bottom-right download launcher. Self-contained;
+    // restores any comments saved for this URL from localStorage.
+    if (window.MarkdownStudio.mountComments) {
+      try { window.MarkdownStudio.mountComments(article); }
+      catch (e) { console.warn('[markdown-studio] comments mount failed:', e); }
+    }
+
     // Render any mermaid diagrams asynchronously. Stash sources +
     // article reference so the PDF print buttons can re-render with
     // a different theme later without re-parsing the .md.

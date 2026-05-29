@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Markdown Studio",
   "short_name": "MD Studio",
-  "version": "0.7.1",
+  "version": "0.8.0",
   "description": "Render .md files with KaTeX math, code highlighting, tables, footnotes, Mermaid, collapsible TOC, Save-as-PDF, and edit mode.",
   "minimum_chrome_version": "88",
   "offline_enabled": true,
@@ -36,6 +36,7 @@
         "lib/toc.js",
         "lib/editor.js",
         "lib/exporter-docx.js",
+        "lib/comments.js",
         "content.js"
       ],
       "css": [

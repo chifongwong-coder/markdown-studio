@@ -3,6 +3,24 @@
 All notable changes to this extension are documented here. Versions follow
 the `manifest.json` `version` field.
 
+## 0.8.0
+
+### Added
+- **Comments.** Select any span of rendered text (a single character, a
+  symbol, or a whole paragraph) and a floating "💬 Comment" button appears;
+  click it to attach a short text comment. Commented passages are marked
+  with a dashed underline (rendered via the CSS Custom Highlight API, so the
+  article DOM is never mutated — Word/PDF export and edit mode are
+  unaffected). A bottom-right launcher opens a panel listing every comment
+  (click to jump and edit, or delete), with a **Download comments** action.
+- **Comment anchoring.** Each comment records the selected quote, ~40 chars
+  of surrounding context, the nearest heading, and a character offset into
+  the rendered text. The download is a sidecar `<name>.comments.md` that
+  leaves the original file untouched and is easy for a reader or tool to
+  locate the passage from.
+- **Persistence.** Comments are saved in `localStorage` keyed by the page
+  URL, so they survive reloads until deleted.
+
 ## 0.7.1
 
 ### Fixed
