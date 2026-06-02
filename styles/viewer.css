@@ -1264,3 +1264,38 @@ body.md-editing.markdown-studio-body {
   outline: 2px solid var(--md-link);
   outline-offset: 2px;
 }
+
+/* PDF export: print-only "Comments" appendix. toc.js injects it into the
+   article just before window.print() and removes it afterward, so it must
+   never show on screen -- only in the printed/PDF output. */
+.md-comment-print-appendix { display: none; }
+@media print {
+  .md-comment-print-appendix {
+    display: block;
+    margin-top: 2.5em;
+    padding-top: 1em;
+    border-top: 2px solid #000;
+  }
+  .md-comment-print-appendix h2 {
+    font-size: 1.3em;
+    margin: 0 0 0.7em;
+    border: none;
+    text-wrap: auto;
+  }
+  .md-comment-print-appendix ol {
+    padding-left: 1.5em;
+    margin: 0;
+  }
+  .md-comment-print-appendix li {
+    margin-bottom: 0.85em;
+    break-inside: avoid;
+  }
+  .md-comment-print-quote {
+    font-style: italic;
+    color: #555;
+    margin-bottom: 0.2em;
+  }
+  .md-comment-print-body {
+    white-space: pre-wrap;
+  }
+}

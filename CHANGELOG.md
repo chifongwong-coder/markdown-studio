@@ -3,6 +3,18 @@
 All notable changes to this extension are documented here. Versions follow
 the `manifest.json` `version` field.
 
+## 0.8.2
+
+### Added
+- **Comments now carry into Word / PDF export.** Word gets **native review
+  comments** — right-margin bubbles anchored on the commented text, with the
+  note bodies in `word/comments.xml`. PDF gets a print-only **"Comments"
+  appendix** listing each note with its quote and section. Comments in ordinary
+  prose anchor **inline**; comments inside lists, tables, code, or math are
+  collected in a trailing **"Comments"** block (they can't be anchored inline).
+  Orphaned comments are skipped in Word (a review comment needs a live anchor)
+  but still appear in the PDF appendix.
+
 ## 0.8.1
 
 Hardening pass on 0.8.0's comments feature.
