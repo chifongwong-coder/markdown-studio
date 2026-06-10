@@ -3,6 +3,26 @@
 All notable changes to this extension are documented here. Versions follow
 the `manifest.json` `version` field.
 
+## 0.9.1
+
+### Fixed
+- **Word export: standalone display equations are now block math.** A
+  stand-alone `$$…$$` is promoted to a top-level `<div class="math-display">`,
+  which the docx exporter previously walked as **inline** `<m:oMath>`. It now
+  emits `<m:oMathPara>` so Word shows a centered, own-line display equation.
+- **Inline `$…$` no longer mis-parses currency.** Following pandoc/CommonMark
+  math convention, the opening `$` must be immediately followed by a non-space
+  and the closing `$` immediately preceded by one — so `costs $5 and $10` stays
+  plain text instead of rendering "5 and " as math. Numeric-leading math like
+  `$2x+1$` still works. (Trade-off: padded delimiters `$ x $` are no longer
+  treated as math — write `$x$`.)
+- **Word export: Mermaid diagrams readable when the page is dark.** The Word
+  button now re-renders diagrams with the light theme before export (and
+  restores the on-screen theme after), matching the PDF button. Dark-theme
+  labels were near-invisible on the exporter's white background.
+- **Display-math delimiter `\[…\]`** now ignores an escaped `\\[`, matching the
+  `$$` rule.
+
 ## 0.9.0
 
 ### Added
