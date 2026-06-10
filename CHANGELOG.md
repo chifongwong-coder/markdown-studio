@@ -3,6 +3,23 @@
 All notable changes to this extension are documented here. Versions follow
 the `manifest.json` `version` field.
 
+## 0.9.0
+
+### Added
+- **Reading-font picker.** A `Sans / Serif / Mono` dropdown in the TOC toolbar
+  lets you switch the on-screen reading font; the choice persists in
+  `localStorage` (`markdown-studio-font`) and is applied on load before render,
+  so there's no flash of the old face. Body and headings follow the choice via
+  the `--md-font-body` / `--md-font-heading` custom properties.
+
+### Changed
+- **Default body font is now sans-serif** (`-apple-system, Segoe UI, …`),
+  replacing the previous serif stack that read as old-fashioned on screen.
+- **Latin-only font stacks.** Presets name Western faces only and end in a
+  generic family keyword, so Chinese, Japanese, Korean and other scripts fall
+  through to the system default for that family. No explicit CJK font names are
+  shipped anymore.
+
 ## 0.8.2
 
 ### Added

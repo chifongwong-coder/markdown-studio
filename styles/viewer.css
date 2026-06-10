@@ -11,6 +11,17 @@
   --md-border: #e2e8f0;
   --md-stripe: #f8fafc;
   --md-muted: #6b7280;
+
+  /* Reading fonts. These default to the 'sans' preset; lib/fonts.js may
+     override them on <html> from the saved choice. Latin faces only; the
+     trailing generic family keyword lets Chinese and other scripts use the
+     system default. See lib/fonts.js for the full preset list. */
+  --md-font-body:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue",
+    Arial, sans-serif;
+  --md-font-heading:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue",
+    Arial, sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -33,10 +44,7 @@ body.markdown-studio-body {
   padding: 0;
   background: var(--md-bg);
   color: var(--md-text);
-  font-family:
-    "Noto Serif CJK SC", "Source Han Serif SC", "Songti SC",
-    "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
-    -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  font-family: var(--md-font-body);
   font-size: 16px;
   line-height: 1.75;
   text-rendering: optimizeLegibility;
@@ -59,9 +67,7 @@ article.markdown-studio-content {
 .markdown-studio-content h5,
 .markdown-studio-content h6 {
   color: var(--md-heading);
-  font-family:
-    "Noto Sans CJK SC", "Source Han Sans SC", "PingFang SC",
-    "Hiragino Sans GB", -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: var(--md-font-heading);
   font-weight: 700;
   line-height: 1.35;
   margin: 1.6em 0 0.6em;
@@ -261,8 +267,8 @@ article.markdown-studio-content {
   background: var(--md-stripe);
   border-right: 1px solid var(--md-border);
   font-family:
-    "Noto Sans CJK SC", "PingFang SC", "Hiragino Sans GB",
-    -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue",
+    Arial, sans-serif;
   font-size: 0.88rem;
   line-height: 1.5;
   z-index: 100;
@@ -324,6 +330,41 @@ article.markdown-studio-content {
   font-size: 0.75em;
   font-weight: 600;
   letter-spacing: 0.04em;
+}
+
+/* Font picker: a glyph + a compact native <select>. Native select keeps the
+   dropdown accessible and themable by the OS without us reinventing a menu. */
+.md-toc-font {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.15em;
+  cursor: pointer;
+  color: var(--md-muted);
+}
+.md-toc-font:hover { color: var(--md-text); }
+.md-toc-font-select {
+  background: none;
+  border: none;
+  color: inherit;
+  font-family: inherit;
+  font-size: 0.75em;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  padding: 0.2em 0.15em;
+  border-radius: 3px;
+  max-width: 6.5em;
+}
+.md-toc-font-select:hover { background: var(--md-block-bg); }
+.md-toc-font-select:focus-visible {
+  outline: 2px solid var(--md-link);
+  outline-offset: 1px;
+}
+/* Native option lists render on an OS surface; force readable colors so dark
+   mode doesn't hand us white-on-white. */
+.md-toc-font-select option {
+  background: var(--md-bg);
+  color: var(--md-text);
 }
 
 /* TOC hide/show tabs. Both are direct children of <body>, mirror each
@@ -593,8 +634,8 @@ body.md-editing.markdown-studio-body {
   border-bottom: 1px solid var(--md-border);
   background: var(--md-stripe);
   font-family:
-    "Noto Sans CJK SC", "PingFang SC", "Hiragino Sans GB",
-    -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue",
+    Arial, sans-serif;
   font-size: 0.88em;
   color: var(--md-muted);
   flex: 0 0 auto;
@@ -722,7 +763,7 @@ body.md-editing.markdown-studio-body {
   background: #fef3c7;
   color: #78350f;
   border-bottom: 1px solid #fbbf24;
-  font-family: var(--md-font);
+  font-family: var(--md-font-body);
 }
 .md-file-tip code {
   background: rgba(120, 53, 15, 0.08);

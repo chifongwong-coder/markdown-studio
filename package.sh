@@ -25,6 +25,7 @@ REQUIRED=(
   manifest.json
   content.js
   lib/render.js
+  lib/fonts.js
   lib/toc.js
   lib/editor.js
   lib/exporter-docx.js
