@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Markdown Studio — Privacy Policy</title>
+<meta name="description" content="Privacy policy for the Markdown Studio browser extension.">
+<style>
+  :root { color-scheme: light dark; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.65;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 2.5rem 1.25rem 4rem;
+    color: #1f2430;
+    background: #ffffff;
+  }
+  h1 { font-size: 1.9rem; margin: 0 0 0.25rem; }
+  h2 { font-size: 1.3rem; margin: 2rem 0 0.6rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.25rem; }
+  .updated { color: #6b7280; font-size: 0.9rem; margin: 0 0 1.5rem; }
+  table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.95rem; }
+  th, td { border: 1px solid #e2e8f0; padding: 0.55rem 0.7rem; text-align: left; vertical-align: top; }
+  th { background: #f8fafc; }
+  code { background: #f4f6f9; padding: 0.1em 0.35em; border-radius: 3px; font-size: 0.9em; }
+  ul { padding-left: 1.3rem; }
+  a { color: #2563eb; }
+  footer { margin-top: 2.5rem; color: #6b7280; font-size: 0.9rem; }
+  @media (prefers-color-scheme: dark) {
+    body { color: #e5e7eb; background: #111827; }
+    h2 { border-color: #374151; }
+    th, td { border-color: #374151; }
+    th { background: #1f2937; }
+    code { background: #1f2937; }
+    a { color: #60a5fa; }
+  }
+</style>
+</head>
+<body>
+  <h1>Markdown Studio — Privacy Policy</h1>
+  <p class="updated">Last updated: 2026-06-10</p>
+
+  <h2>Summary</h2>
+  <p><strong>This extension does not collect, transmit, or share any personal
+  data.</strong> All Markdown rendering happens locally inside your browser
+  tab. No content from your <code>.md</code> files leaves your machine.</p>
+
+  <h2>What data the extension touches</h2>
+  <table>
+    <thead>
+      <tr><th>Data</th><th>What</th><th>Where it lives</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>The text of the <code>.md</code> file you opened</td>
+        <td>Parsed and rendered into HTML</td>
+        <td>In-memory only, inside the browser tab. Discarded when the tab closes.</td>
+      </tr>
+      <tr>
+        <td>Display settings</td>
+        <td>Reading font, font size, content width, and colour theme
+          (<code>markdown-studio-font</code>, <code>markdown-studio-theme</code>,
+          <code>markdown-studio-font-size</code>, <code>markdown-studio-content-width</code>)</td>
+        <td><code>localStorage</code> of the current origin. Never transmitted.</td>
+      </tr>
+      <tr>
+        <td>TOC collapse/expand preference</td>
+        <td>A single boolean (<code>markdown-studio-toc-hidden</code>)</td>
+        <td><code>localStorage</code> of the current origin. Never transmitted.</td>
+      </tr>
+      <tr>
+        <td>File-access tip dismissal</td>
+        <td>A single boolean (<code>markdown-studio-file-tip-dismissed-v1</code>)</td>
+        <td><code>localStorage</code> of the current origin. Never transmitted.</td>
+      </tr>
+      <tr>
+        <td>Comments you add to a document</td>
+        <td>The note text you type, plus the quoted passage, its surrounding
+          context, and the nearest heading it anchors to
+          (<code>markdown-studio-comments::…</code>)</td>
+        <td>For local (<code>file://</code>) files: saved in <code>localStorage</code>
+          so they persist across reloads. For web (<code>http(s)</code>) pages: kept
+          in memory only and cleared on refresh. Never transmitted.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>When you choose <strong>Word</strong> (<code>.docx</code>) from the Export
+  menu, the extension additionally fetches each <code>&lt;img&gt;</code>
+  referenced by the rendered article so it can embed the image bytes into the
+  downloaded <code>.docx</code>. These fetches go to whatever URLs the original
+  <code>.md</code> references — the extension does not add destinations of its
+  own, and the action happens only when you explicitly export.</p>
+
+  <h2>What the extension does NOT do</h2>
+  <ul>
+    <li>No cookies, no analytics, no advertising.</li>
+    <li>No telemetry or crash reporting.</li>
+    <li>No remote API calls. The bundled libraries execute entirely locally.</li>
+    <li>No third-party tracking pixels or beacons.</li>
+    <li>No reading of pages other than <code>.md</code>, <code>.markdown</code>,
+      <code>.mdown</code> files in the declared content-script match patterns.</li>
+  </ul>
+
+  <h2>User-data categories</h2>
+  <p>None of the following categories are collected, used, or transferred by
+  this extension:</p>
+  <ul>
+    <li>Personally identifiable information</li>
+    <li>Health information</li>
+    <li>Financial and payment information</li>
+    <li>Authentication information</li>
+    <li>Personal communications</li>
+    <li>Location</li>
+    <li>Web browsing history</li>
+    <li>User activity</li>
+    <li>Website content</li>
+  </ul>
+  <p>In addition, the developer certifies that user data is not sold or
+  transferred to third parties outside the approved use cases, is not used for
+  purposes unrelated to the extension's single purpose (rendering Markdown
+  locally), and is not used to determine creditworthiness or for lending
+  purposes.</p>
+
+  <h2>Permissions</h2>
+  <p>The extension declares only <code>content_scripts</code> matching
+  <code>.md</code> URLs (HTTP, HTTPS, and <code>file://</code>). It does not
+  request <code>tabs</code>, <code>history</code>, <code>storage</code>,
+  <code>webRequest</code>, or any other browser API permission.</p>
+
+  <h2>Contact</h2>
+  <p>For questions about this policy or about the extension, email
+  <strong>wongchifong0223@gmail.com</strong>, or open an issue at
+  <a href="https://github.com/chifongwong-coder/markdown-studio/issues">the project repository</a>.</p>
+
+  <footer>Markdown Studio — local-first Markdown rendering, editing, and export.</footer>
+</body>
+</html>
