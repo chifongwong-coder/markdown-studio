@@ -1,6 +1,6 @@
 # Privacy Policy
 
-_Last updated: 2026-05-22_
+_Last updated: 2026-06-10_
 
 ## Summary
 
@@ -13,15 +13,17 @@ from your `.md` files leaves your machine.
 | Data | What | Where it lives |
 |------|------|----------------|
 | The text of the `.md` file you opened | Parsed and rendered into HTML | In-memory only, inside the browser tab. Discarded when the tab closes. |
+| Display settings | Reading font, font size, content width, and colour theme (`markdown-studio-font`, `markdown-studio-theme`, `markdown-studio-font-size`, `markdown-studio-content-width`) | `localStorage` of the current origin. Never transmitted. |
 | TOC collapse/expand preference | A single boolean (`markdown-studio-toc-hidden`) | `localStorage` of the current origin. Never transmitted. |
 | File-access tip dismissal | A single boolean (`markdown-studio-file-tip-dismissed-v1`) | `localStorage` of the current origin. Never transmitted. |
+| Comments you add to a document | The note text you type, plus the quoted passage, its surrounding context, and the nearest heading it anchors to (`markdown-studio-comments::…`) | For local (`file://`) files: saved in `localStorage` so they persist across reloads. For web (`http(s)`) pages: kept in memory only and cleared on refresh. Never transmitted. |
 
-When you click the **Word** (`.docx`) export button, the extension
+When you choose **Word** (`.docx`) from the Export menu, the extension
 additionally fetches each `<img>` referenced by the rendered article so
 it can embed the image bytes into the downloaded `.docx`. These fetches
 go to whatever URLs the original `.md` references — the extension does
 not add destinations of its own, and the action happens only when you
-explicitly click Export.
+explicitly export.
 
 That is everything. There is no other data the extension reads, writes, or
 sends.
