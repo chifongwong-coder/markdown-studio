@@ -16,11 +16,13 @@ literal, and escaped `\$` must not trigger formula extraction.
 - **Syntax highlighting** — highlight.js, language auto-detected
 - **GFM** — tables, task lists, strikethrough, autolinks
 - **Pandoc-style footnotes** — `[^id]` references + a collected footnotes section
-- **Mermaid diagrams** — ` ```mermaid ` fenced blocks render to SVG (flowcharts, sequence, class, state, pie, gantt, etc.); theme follows light/dark mode
+- **Mermaid diagrams** — ` ```mermaid ` fenced blocks render to SVG (flowcharts, sequence, class, state, pie, gantt, etc.); honors the active theme
 - **Collapsible sidebar TOC** — auto-built from headings, click to scroll, scroll-driven active-section tracking, persists collapsed/expanded state
-- **Save as PDF / print** — `PDF` button in the TOC header triggers the browser's print pipeline; math, mermaid, code, and footnotes all paginate with on-screen fidelity
-- **Edit mode** — `Edit` button opens a split textarea + live-preview view; click `Save` to download the modified markdown as a new `.md` file (no in-place writes; the original file on disk / on a server is never modified)
-- **Dark mode** — follows `prefers-color-scheme`
+- **Export to PDF or Word** — the `Export` menu saves a paginated PDF (math, mermaid, code, and footnotes keep on-screen fidelity), or a Word `.docx` with **editable equations** (math embedded as OMML, plus native tables, lists, footnotes, and hyperlinks)
+- **Comments** — select any text to attach a comment (dashed-underline highlight); export all annotations as a sidecar `.comments.md`, or fold them into the PDF/Word export, leaving the original file untouched
+- **Edit mode** — `Edit` button opens a split textarea + live-preview view; click `Download` to save the modified markdown as a new `.md` file (no in-place writes; the original file on disk / on a server is never modified)
+- **Reading settings** — a gear menu adjusts the reading font (sans / serif / mono), font size, and content width
+- **Themes** — Auto (follows `prefers-color-scheme`), Light, Dark, or Sepia
 - **Local files** — supports `file:///` paths (requires opt-in on the extension page)
 - **Sanitized output** — rendered HTML passes through DOMPurify before being written to the DOM
 - **Local rendering** — no analytics, no telemetry, no remote requests; every dependency ships inside the extension package
