@@ -1,4 +1,10 @@
-/* markdown-studio theme. Light/dark follows prefers-color-scheme. */
+/* markdown-studio theme.
+   Colour theme is driven by the data-md-theme attribute on <html> (set by
+   lib/settings.js): "auto" (default) follows prefers-color-scheme, while
+   "light" / "dark" / "sepia" force a palette. The :root block below is the
+   light palette and also the no-JS fallback. Reading font, font-size and
+   content-width are exposed as custom properties so the settings panel can
+   tweak them live. */
 
 :root {
   --md-bg: #ffffff;
@@ -12,20 +18,55 @@
   --md-stripe: #f8fafc;
   --md-muted: #6b7280;
 
-  /* Reading fonts. These default to the 'sans' preset; lib/fonts.js may
-     override them on <html> from the saved choice. Latin faces only; the
-     trailing generic family keyword lets Chinese and other scripts use the
-     system default. See lib/fonts.js for the full preset list. */
+  /* Reading fonts. Default to the 'sans' preset; lib/settings.js may override
+     these on <html> from the saved choice. Latin faces only; the trailing
+     generic family keyword lets Chinese and other scripts use the system
+     default. See lib/settings.js for the full preset list. */
   --md-font-body:
     -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue",
     Arial, sans-serif;
   --md-font-heading:
     -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue",
     Arial, sans-serif;
+
+  /* Reader-adjustable metrics (settings panel overrides these on <html>). */
+  --md-font-size: 16px;
+  --md-content-width: 860px;
 }
 
+/* Dark palette, shared by explicit dark and (via the media query) auto. */
+html[data-md-theme="dark"] {
+  --md-bg: #1a1a2e;
+  --md-text: #e0e0e0;
+  --md-heading: #ffffff;
+  --md-heading-rule: #ffffff;
+  --md-link: #60a5fa;
+  --md-code-bg: #16213e;
+  --md-block-bg: #0f3460;
+  --md-border: #334155;
+  --md-stripe: #1e293b;
+  --md-muted: #94a3b8;
+}
+
+/* Sepia: a warm, low-contrast reading palette. */
+html[data-md-theme="sepia"] {
+  --md-bg: #f5ecd9;
+  --md-text: #5b4636;
+  --md-heading: #433422;
+  --md-heading-rule: #5b4636;
+  --md-link: #9a5b34;
+  --md-code-bg: #ece1c9;
+  --md-block-bg: #eaddc2;
+  --md-border: #ddcba6;
+  --md-stripe: #efe6d2;
+  --md-muted: #8c7a60;
+}
+
+/* Auto: follow the OS. Applies to explicit "auto" and the no-attribute
+   fallback, but NOT to an explicit light/dark/sepia choice. */
 @media (prefers-color-scheme: dark) {
-  :root {
+  html[data-md-theme="auto"],
+  :root:not([data-md-theme]) {
     --md-bg: #1a1a2e;
     --md-text: #e0e0e0;
     --md-heading: #ffffff;
@@ -45,14 +86,14 @@ body.markdown-studio-body {
   background: var(--md-bg);
   color: var(--md-text);
   font-family: var(--md-font-body);
-  font-size: 16px;
+  font-size: var(--md-font-size, 16px);
   line-height: 1.75;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
 }
 
 article.markdown-studio-content {
-  max-width: 860px;
+  max-width: var(--md-content-width, 860px);
   margin: 0 auto;
   padding: 2.4em 1.6em 4em;
   box-sizing: border-box;
@@ -296,8 +337,7 @@ article.markdown-studio-content {
   border: none;
 }
 .md-toc-toggle-all,
-.md-toc-print,
-.md-toc-word,
+.md-toc-export,
 .md-toc-edit {
   background: none;
   border: none;
@@ -309,8 +349,7 @@ article.markdown-studio-content {
   line-height: 1;
 }
 .md-toc-toggle-all:hover,
-.md-toc-print:hover,
-.md-toc-word:hover,
+.md-toc-export:hover,
 .md-toc-edit:hover {
   background: var(--md-block-bg);
   color: var(--md-text);
@@ -325,46 +364,182 @@ article.markdown-studio-content {
   align-items: center;
   gap: 0.2em;
 }
-.md-toc-print,
-.md-toc-word {
+.md-toc-export {
   font-size: 0.75em;
   font-weight: 600;
   letter-spacing: 0.04em;
+}
+.md-toc-export[aria-expanded="true"] {
+  background: var(--md-block-bg);
+  color: var(--md-text);
 }
 
-/* Font picker: a glyph + a compact native <select>. Native select keeps the
-   dropdown accessible and themable by the OS without us reinventing a menu. */
-.md-toc-font {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.15em;
-  cursor: pointer;
-  color: var(--md-muted);
+/* Export dropdown menu (PDF / Word). Fixed-position popover anchored under
+   the Export button by toc.js. */
+.md-export-menu {
+  position: fixed;
+  z-index: 10001;
+  min-width: 9.5em;
+  background: var(--md-bg);
+  color: var(--md-text);
+  border: 1px solid var(--md-border);
+  border-radius: 8px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.18);
+  padding: 0.3em;
+  font-family: var(--md-font-body);
 }
-.md-toc-font:hover { color: var(--md-text); }
-.md-toc-font-select {
+.md-export-item {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  text-align: left;
   background: none;
   border: none;
-  color: inherit;
-  font-family: inherit;
-  font-size: 0.75em;
-  font-weight: 600;
-  letter-spacing: 0.04em;
   cursor: pointer;
-  padding: 0.2em 0.15em;
-  border-radius: 3px;
-  max-width: 6.5em;
+  color: var(--md-text);
+  font-family: inherit;
+  font-size: 0.85em;
+  padding: 0.45em 0.6em;
+  border-radius: 5px;
 }
-.md-toc-font-select:hover { background: var(--md-block-bg); }
-.md-toc-font-select:focus-visible {
+.md-export-item:hover { background: var(--md-block-bg); }
+.md-export-item:disabled { opacity: 0.5; cursor: default; }
+.md-export-item:focus-visible {
+  outline: 2px solid var(--md-link);
+  outline-offset: -2px;
+}
+
+/* Settings gear: opens the display-settings popover (font, size, width, theme). */
+.md-toc-settings {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--md-muted);
+  font-size: 0.95em;
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+  line-height: 1;
+}
+.md-toc-settings:hover { background: var(--md-block-bg); color: var(--md-text); }
+.md-toc-settings:focus-visible {
   outline: 2px solid var(--md-link);
   outline-offset: 1px;
 }
-/* Native option lists render on an OS surface; force readable colors so dark
-   mode doesn't hand us white-on-white. */
-.md-toc-font-select option {
+.md-toc-settings[aria-expanded="true"] { background: var(--md-block-bg); color: var(--md-text); }
+
+/* Settings popover. Fixed-position, JS anchors it under the gear button. */
+.md-settings-panel {
+  position: fixed;
+  z-index: 10001;
+  width: 244px;
+  max-width: calc(100vw - 1.6em);
+  box-sizing: border-box;
   background: var(--md-bg);
   color: var(--md-text);
+  border: 1px solid var(--md-border);
+  border-radius: 8px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.18);
+  padding: 0.7em 0.85em 0.85em;
+  font-family: var(--md-font-body);
+  font-size: 14px;
+  line-height: 1.4;
+}
+.md-settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6em;
+  margin-top: 0.7em;
+}
+.md-settings-row:first-child { margin-top: 0; }
+.md-settings-label {
+  color: var(--md-muted);
+  font-size: 0.85em;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+/* Segmented control (theme, font). */
+.md-settings-seg {
+  display: inline-flex;
+  border: 1px solid var(--md-border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.md-settings-seg button {
+  background: none;
+  border: none;
+  border-left: 1px solid var(--md-border);
+  color: var(--md-muted);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.8em;
+  padding: 0.3em 0.5em;
+  line-height: 1.1;
+}
+.md-settings-seg button:first-child { border-left: none; }
+.md-settings-seg button:hover { background: var(--md-block-bg); color: var(--md-text); }
+.md-settings-seg button[aria-pressed="true"] {
+  background: var(--md-link);
+  color: #fff;
+}
+.md-settings-seg button:focus-visible {
+  outline: 2px solid var(--md-link);
+  outline-offset: -2px;
+}
+/* Stepper (size, width). */
+.md-settings-step {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+}
+.md-settings-step button {
+  background: var(--md-block-bg);
+  border: 1px solid var(--md-border);
+  color: var(--md-text);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.95em;
+  width: 1.7em;
+  height: 1.7em;
+  border-radius: 5px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.md-settings-step button:hover { background: var(--md-border); }
+.md-settings-step button:disabled { opacity: 0.4; cursor: default; }
+.md-settings-step button:focus-visible {
+  outline: 2px solid var(--md-link);
+  outline-offset: 1px;
+}
+.md-settings-value {
+  min-width: 3.4em;
+  text-align: center;
+  font-size: 0.82em;
+  font-variant-numeric: tabular-nums;
+}
+.md-settings-footer {
+  margin-top: 0.85em;
+  padding-top: 0.6em;
+  border-top: 1px solid var(--md-border);
+  text-align: right;
+}
+.md-settings-reset {
+  background: none;
+  border: none;
+  color: var(--md-link);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.8em;
+  padding: 0.2em 0.3em;
+  border-radius: 4px;
+}
+.md-settings-reset:hover { text-decoration: underline; }
+.md-settings-reset:focus-visible {
+  outline: 2px solid var(--md-link);
+  outline-offset: 1px;
 }
 
 /* TOC hide/show tabs. Both are direct children of <body>, mirror each
@@ -575,8 +750,7 @@ body.markdown-studio-with-toc {
 .md-toc-hide:focus-visible,
 .md-toc-handle:focus-visible,
 .md-toc-toggle-all:focus-visible,
-.md-toc-print:focus-visible,
-.md-toc-word:focus-visible,
+.md-toc-export:focus-visible,
 .md-toc-edit:focus-visible {
   outline: 2px solid var(--md-link);
   outline-offset: 2px;
@@ -853,7 +1027,9 @@ body.md-editing.markdown-studio-body {
   .md-comment-add,
   .md-comment-popover,
   .md-comment-fab,
-  .md-comment-panel { display: none !important; }
+  .md-comment-panel,
+  .md-export-menu,
+  .md-settings-panel { display: none !important; }
   /* Drop the comment dashed-underline in PDFs -- annotations aren't part of
    * the document the user is exporting. */
   ::highlight(md-comment) { text-decoration: none; }
@@ -903,8 +1079,13 @@ body.md-editing.markdown-studio-body {
    * The redefined --md-* values below override the system ones so
    * derived styles (table stripes, blockquote bg, borders, links)
    * stay light even when the user's system is in dark mode.
+   *
+   * The html[data-md-theme] selector is required so this beats an explicit
+   * dark/sepia theme rule (same specificity, but this block is later in the
+   * source) -- otherwise a forced dark theme would carry into the PDF.
    * ============================================================ */
-  :root {
+  :root,
+  html[data-md-theme] {
     --md-bg: #ffffff;
     --md-text: #2c3e50;
     --md-heading: #1a1a2e;

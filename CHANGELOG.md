@@ -3,6 +3,30 @@
 All notable changes to this extension are documented here. Versions follow
 the `manifest.json` `version` field.
 
+## 1.0.0
+
+First stable release.
+
+### Added
+- **Display settings panel.** A gear button in the TOC toolbar opens a popover
+  to control reading **font** (Sans / Serif / Mono), **font size**, **content
+  width**, and **colour theme** — with a Reset. Every choice persists in
+  `localStorage` and is applied on load before render (no flash). Built on CSS
+  custom properties (`--md-font-size`, `--md-content-width`, …) on `<html>`.
+- **Theme override.** Explicit **Auto / Light / Dark / Sepia** instead of only
+  following the OS. Auto still tracks `prefers-color-scheme`; the others force a
+  palette. Driven by a `data-md-theme` attribute on `<html>`.
+
+### Changed
+- **PDF and Word are consolidated under one `Export ▾` dropdown** in the
+  toolbar, replacing the two separate buttons.
+- The standalone reading-font dropdown is now part of the settings panel.
+
+### Notes
+- PDF export still forces a light palette regardless of the on-screen theme.
+- Mermaid diagram theming follows the OS color scheme, not a manually forced
+  Light/Dark/Sepia theme.
+
 ## 0.9.1
 
 ### Fixed
